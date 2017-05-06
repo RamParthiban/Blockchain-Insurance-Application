@@ -1,0 +1,58 @@
+pragma solidity ^0.4.0;
+
+contract MSInsuranceVO {
+struct Offer{
+    string hospitalname;
+    address hospitaladdress;
+    string description;
+    mapping(string=>uint[]) coveragebydeps;
+    uint votesreceived;
+}
+struct Transaction{
+    address hospitaladdress;
+    address patientaddress;
+    uint date;
+    string department;
+    uint price;
+    uint coverage;
+    uint patienttobepaid;
+    bool ispatientpaid;
+    uint hospitalamount;
+    bool ishospitalpaid; 
+    uint subscriptionamount;
+    bool issubspaid;
+}
+struct Patient{
+    bool premiumpaid;
+    address patientaddress;
+    uint premium;
+    mapping(address=>bool) votinglist;
+}
+    mapping (address => Patient) paidpremium ;
+    mapping (uint=>mapping(address => uint)) historypremium;
+    mapping (address => uint) paysubs;
+    mapping (uint=>mapping(address => uint)) historysubs;
+    uint public periodno ;
+    uint public startperiod ; 
+    uint public endperiod ;
+    mapping(address=>Offer) offers;
+    mapping(address=>Transaction) transactionbypatient;
+    mapping(address=>Transaction) transactionbyhospital;
+    mapping(uint=>mapping(address=>Transaction)) historytransbypatient;
+    mapping(uint=>mapping(address=>Transaction)) historytransbyhospital;    
+//after login
+function CheckifRegistered(address PatientAdd) constant returns (bool premiumpaid){
+    Patient smt = paidpremium[PatientAdd];
+    if(smt.premiumpaid){
+        throw;
+    }
+    premiumpaid=smt.premiumpaid;
+}
+function CalculatePremium(address PatientAdd) constant returns(uint premiumamount){
+    //to be filled, ins.
+    premiumamount=500;
+}
+function PremiumPay(address PatientAdd) public payable {
+    
+}
+}
