@@ -1,58 +1,151 @@
 pragma solidity ^0.4.0;
 
 contract MSInsuranceVO {
-struct Offer{
-    string hospitalname;
-    address hospitaladdress;
-    string description;
-    mapping(string=>uint[]) coveragebydeps;
-    uint votesreceived;
-}
-struct Transaction{
-    address hospitaladdress;
-    address patientaddress;
-    uint date;
-    string department;
-    uint price;
-    uint coverage;
-    uint patienttobepaid;
-    bool ispatientpaid;
-    uint hospitalamount;
-    bool ishospitalpaid; 
-    uint subscriptionamount;
-    bool issubspaid;
-}
-struct Patient{
-    bool premiumpaid;
-    address patientaddress;
-    uint premium;
-    mapping(address=>bool) votinglist;
-}
-    mapping (address => Patient) paidpremium ;
-    mapping (uint=>mapping(address => uint)) historypremium;
-    mapping (address => uint) paysubs;
-    mapping (uint=>mapping(address => uint)) historysubs;
+    struct Patient{
+        bool premiumpaid;
+        address patientaddress;
+        uint premium;
+        mapping(address=>bool) votinglist;
+    }
+    
+    struct Hospital{
+        address hospitaladdress;
+        bool isregistered;
+        uint subspercentage;
+        bool isactive;
+        uint voteresult;
+        
+        Offer hospitaloffer;
+    }
+    
+    struct Offer{
+        string hospitalname;
+        address hospitaladdress;
+        string description;
+        mapping(string=>uint) covbydepsforperc;
+        mapping(string=>uint) covbydepsforprice;
+    }
+    
+    struct Transaction{
+        address hospitaladdress;
+        address patientaddress;
+        uint date;
+        string department;
+        uint price;
+        uint coverage;
+        uint patienttobepaid;
+        bool ispatientpaid;
+        uint hospitalamount;
+        bool ishospitalpaid; 
+        uint subscriptionamount;
+        bool issubspaid;
+    }
+
     uint public periodno ;
     uint public startperiod ; 
     uint public endperiod ;
-    mapping(address=>Offer) offers;
+    
+    mapping (address => uint) paidpremium ;
+    mapping (address => Patient) registeredpatients ;
+    mapping (uint=>mapping(address => Patient)) historypatient;
+    
+    mapping (address => Hospital) registeredhospitals;
+    mapping (uint=>mapping(address => Hospital)) historyhospital;
+    
+    mapping(address=>Offer) periodoffers;
     mapping(address=>Transaction) transactionbypatient;
     mapping(address=>Transaction) transactionbyhospital;
     mapping(uint=>mapping(address=>Transaction)) historytransbypatient;
-    mapping(uint=>mapping(address=>Transaction)) historytransbyhospital;    
-//after login
-function CheckifRegistered(address PatientAdd) constant returns (bool premiumpaid){
-    Patient smt = paidpremium[PatientAdd];
-    if(smt.premiumpaid){
-        throw;
-    }
-    premiumpaid=smt.premiumpaid;
-}
-function CalculatePremium(address PatientAdd) constant returns(uint premiumamount){
-    //to be filled, ins.
-    premiumamount=500;
-}
-function PremiumPay(address PatientAdd) public payable {
+    mapping(uint=>mapping(address=>Transaction)) historytransbyhospital;
     
-}
+    //after login
+    function CheckifPatientRegistered(address PatientAdd) constant returns (bool isregistered){
+        if(registeredpatients[PatientAdd].premiumpaid){
+            isregistered=true;
+        }else{
+            isregistered = false;
+        }
+        
+    }
+    
+    function CheckifHospitalRegistered(address HospitalAdd) constant returns (bool isregistered){
+        if(registeredhospitals[HospitalAdd].isregistered){
+            isregistered=true;
+        }else{
+            isregistered = false;
+        }
+        
+    }
+    
+    function CheckifPreimumPaid(address PatientAdd) constant returns (bool ispremiumpaid){
+        ispremiumpaid=false;
+        if(paidpremium[PatientAdd] != 0){
+            ispremiumpaid=true;
+        }
+    }
+
+    function CalculatePremium(address PatientAdd) constant returns(uint premiumamount){
+        //to be filled, ins.
+        premiumamount=500;
+    }
+    
+    function CalculateSubscription(address HospitalAdd) constant returns(uint subspercentage){
+        //to be filled, ins.
+        subspercentage=2;
+    }
+    
+    function PremiumPay(address PatientAdd, uint amount) public payable {
+        paidpremium[PatientAdd] = amount;
+    }
+    
+    function RegisterPerson(address PatientAdd, uint amount) {
+        Patient newPatient;
+        newPatient.premiumpaid = true;
+        newPatient.patientaddress = PatientAdd;
+        newPatient.premium = amount;
+        
+        if(!CheckifPatientRegistered(PatientAdd)){
+            if(CheckifPreimumPaid(PatientAdd)){
+                registeredpatients[PatientAdd] = newPatient ;
+            }
+        }
+    }
+    
+    function RegisterHospital(address HospitalAdd, uint percentage) {
+        Hospital newHospital;
+        newHospital.isregistered = true;
+        newHospital.hospitaladdress = HospitalAdd;
+        newHospital.subspercentage = percentage;
+        newHospital.isactive = false;
+        newHospital.voteresult = 0;
+        
+        if(!CheckifHospitalRegistered(HospitalAdd)){
+            registeredhospitals[HospitalAdd] = newHospital ;
+        }
+    }
+    
+    function AddOffer(address HospitalAdd, string hospitalname, string hospitaldesc) {
+        if(!CheckifHospitalRegistered(HospitalAdd)){
+            Offer newOffer;
+            newOffer.hospitalname = hospitalname;
+            newOffer.hospitaladdress = HospitalAdd;
+            newOffer.description = hospitaldesc;
+            
+            registeredhospitals[HospitalAdd].hospitaloffer = newOffer;
+        
+            periodoffers[HospitalAdd] = newOffer;
+        }else
+            throw;
+
+    }
+    
+    function AddOfferCoverage(address HospitalAdd, string covdep, uint covperc, uint covprice) {
+        if(!CheckifHospitalRegistered(HospitalAdd)){
+            registeredhospitals[HospitalAdd].hospitaloffer.covbydepsforperc[covdep] = covperc;
+            registeredhospitals[HospitalAdd].hospitaloffer.covbydepsforprice[covdep] = covprice;
+            periodoffers[HospitalAdd].covbydepsforperc[covdep] = covperc;
+            periodoffers[HospitalAdd].covbydepsforprice[covdep] = covprice;
+        }else
+            throw;
+    }
 }
