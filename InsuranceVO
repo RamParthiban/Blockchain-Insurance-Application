@@ -26,7 +26,7 @@ contract MSInsuranceVO {
     struct Offer{
         string hospitalname;
         address hospitaladdress;
-        string description;
+        string offerdesc;
         string[] coveragedepts;
         uint[] prices;
         uint[] percentages;
@@ -37,14 +37,18 @@ contract MSInsuranceVO {
         address patientaddress;
         uint date;
         string department;
+        
         uint price;
         uint coverage;
         uint patienttobepaid;
+        
         bool ispatientpaid;
         uint hospitalamount;
         bool ishospitalpaid; 
         uint subscriptionamount;
         bool issubspaid;
+        
+        bool isactive;
     }
 
     uint public periodno ;
@@ -65,6 +69,37 @@ contract MSInsuranceVO {
     mapping(uint=>mapping(address=>Transaction)) historytransbypatient;
     mapping(uint=>mapping(address=>Transaction)) historytransbyhospital;
     
+    function MSInsuranceVO() { 
+        periodno = 1; 
+        startperiod = now;
+        endperiod = startperiod + 365;
+        paidpremium[msg.sender] = 1;
+        
+        registeredpatients[msg.sender].premiumpaid = true;
+        registeredpatients[msg.sender].patientaddress = msg.sender;
+        registeredpatients[msg.sender].premium = 1;
+        
+        registeredhospitals[msg.sender].hospitaladdress = msg.sender;
+        registeredhospitals[msg.sender].subspercentage = 2;
+        registeredhospitals[msg.sender].isregistered = true;
+        registeredhospitals[msg.sender].isactive = false;
+        registeredhospitals[msg.sender].isinvotestage = true;
+        registeredhospitals[msg.sender].votecount1 = 0;
+        registeredhospitals[msg.sender].votecount2 = 0;
+        registeredhospitals[msg.sender].votestartdate = now;
+        registeredhospitals[msg.sender].voteenddate = now + 365;
+        
+        registeredhospitals[0xe4e10dcf8011a091979313de6931992174ba2885].hospitaladdress = 0xe4e10dcf8011a091979313de6931992174ba2885;
+        registeredhospitals[msg.sender].subspercentage = 2;
+        registeredhospitals[msg.sender].isregistered = true;
+        registeredhospitals[msg.sender].isactive = false;
+        registeredhospitals[msg.sender].isinvotestage = true;
+        registeredhospitals[msg.sender].votecount1 = 0;
+        registeredhospitals[msg.sender].votecount2 = 0;
+        registeredhospitals[msg.sender].votestartdate = now;
+        registeredhospitals[msg.sender].voteenddate = now + 365;
+    }
+    
     //after login
     function CheckifPatientRegistered(address PatientAdd) constant returns (bool isregistered){
         if(registeredpatients[PatientAdd].premiumpaid){
@@ -77,7 +112,7 @@ contract MSInsuranceVO {
     
     function CheckifHospitalRegistered(address HospitalAdd) constant returns (bool isregistered){
         if(registeredhospitals[HospitalAdd].isregistered){
-            isregistered=true;
+            isregistered = true;
         }else{
             isregistered = false;
         }
@@ -105,52 +140,55 @@ contract MSInsuranceVO {
         paidpremium[PatientAdd] = amount;
     }
     
-    function RegisterPerson(address PatientAdd, uint amount) {
-        Patient newPatient;
-        newPatient.premiumpaid = true;
-        newPatient.patientaddress = PatientAdd;
-        newPatient.premium = amount;
-        
+    function RegisterPerson(address PatientAdd, uint amount) returns(bool registerstatus) {
+        registerstatus = false;
         if(!CheckifPatientRegistered(PatientAdd)){
             if(CheckifPreimumPaid(PatientAdd)){
-                registeredpatients[PatientAdd] = newPatient ;
+                registeredpatients[PatientAdd].premiumpaid = true;
+                registeredpatients[PatientAdd].patientaddress = PatientAdd;
+                registeredpatients[PatientAdd].premium = amount;
+                
+                registerstatus = true;
             }
         }
     }
     
-    function RegisterHospital(address HospitalAdd, uint percentage) {
-        Hospital newHospital;
-        newHospital.isregistered = true;
-        newHospital.hospitaladdress = HospitalAdd;
-        newHospital.subspercentage = percentage;
-        newHospital.isinvotestage = true;
-        newHospital.isactive = false;
-        newHospital.votecount1 = 0;
-        newHospital.votecount2 = 0;
-        newHospital.votestartdate = now;
-        newHospital.voteenddate = newHospital.votestartdate + 7 days;
-        
+    function RegisterHospital(address HospitalAdd, uint percentage) returns (bool registerstatus) {
+        registerstatus = false;
         if(!CheckifHospitalRegistered(HospitalAdd)){
-            registeredhospitals[HospitalAdd] = newHospital ;
+            registeredhospitals[HospitalAdd].isregistered = true;
+            registeredhospitals[HospitalAdd].hospitaladdress = HospitalAdd;
+            registeredhospitals[HospitalAdd].subspercentage = percentage;
+            registeredhospitals[HospitalAdd].isinvotestage = true;
+            registeredhospitals[HospitalAdd].isactive = false;
+            registeredhospitals[HospitalAdd].votecount1 = 0;
+            registeredhospitals[HospitalAdd].votecount2 = 0;
+            registeredhospitals[HospitalAdd].votestartdate = now;
+            registeredhospitals[HospitalAdd].voteenddate = registeredhospitals[HospitalAdd].votestartdate + 7 days;
+            
+            registerstatus = true;
         }
     }
     
-    function AddOffer(address HospitalAdd, string hospitalname, string hospitaldesc) {
-        if(CheckifHospitalRegistered(HospitalAdd)){
-            Offer newOffer;
-            newOffer.hospitalname = hospitalname;
-            newOffer.hospitaladdress = HospitalAdd;
-            newOffer.description = hospitaldesc;
+    function AddOffer(address HospitalAdd, string hospitalname, string hospitaldesc) returns (bool offerstatus)  {
+        offerstatus = false;
+         if(CheckifHospitalRegistered(HospitalAdd)){  
+            registeredhospitals[HospitalAdd].hospitaloffer.hospitalname = hospitalname;
+            registeredhospitals[HospitalAdd].hospitaloffer.hospitaladdress = HospitalAdd;
+            registeredhospitals[HospitalAdd].hospitaloffer.offerdesc = hospitaldesc;
             
-            registeredhospitals[HospitalAdd].hospitaloffer = newOffer;
-        
-            periodoffers[HospitalAdd] = newOffer;
-        }else
-            throw;
-
+            periodoffers[HospitalAdd].hospitalname = hospitalname;
+            periodoffers[HospitalAdd].hospitaladdress = HospitalAdd;
+            periodoffers[HospitalAdd].offerdesc = hospitaldesc;
+            
+            offerstatus = true;
+         }else{
+             throw;
+         }
     }
     
-    function AddOfferCoverage(address HospitalAdd, string covdep, uint covprice, uint covperc) {
+    function AddOfferCoverage(address HospitalAdd, string covdep, uint covprice, uint covperc) returns (bool coveragestatus) {
+        coveragestatus = false;
         if(CheckifHospitalRegistered(HospitalAdd)){
             registeredhospitals[HospitalAdd].hospitaloffer.coveragedepts.push(covdep);
             registeredhospitals[HospitalAdd].hospitaloffer.prices.push(covprice);
@@ -158,17 +196,21 @@ contract MSInsuranceVO {
             periodoffers[HospitalAdd].coveragedepts.push(covdep);
             periodoffers[HospitalAdd].prices.push(covprice);
             periodoffers[HospitalAdd].percentages.push(covperc);
+            
+            coveragestatus = true;
         }else
             throw;
     }
     
-    function VoteTheHosptal(address VoterAdd, address HospitalAdd, uint vote){
+    function VoteTheHosptal(address VoterAdd, address HospitalAdd, uint vote) returns (bool votestatus){
+        votestatus = false;
         if(CheckifPatientRegistered(VoterAdd) && CheckifHospitalRegistered(HospitalAdd) && registeredhospitals[HospitalAdd].isinvotestage){
-            if(registeredhospitals[HospitalAdd].voteenddate <= now){
+            if(registeredhospitals[HospitalAdd].voteenddate >= now){
                 if(registeredpatients[VoterAdd].votinglist[HospitalAdd] != 1 && registeredpatients[VoterAdd].votinglist[HospitalAdd] != 2 ){
                     registeredpatients[VoterAdd].votinglist[HospitalAdd] = vote;
                     if(vote == 1)  registeredhospitals[HospitalAdd].votecount1 += 1;
                     else if(vote == 2)  registeredhospitals[HospitalAdd].votecount2 += 1;
+                    votestatus = true;
                 }
                 else{
                     throw;
@@ -188,10 +230,22 @@ contract MSInsuranceVO {
     
     function GetOfferOfHospital (address HospitalAdd) constant returns(string offerdetails){
         Offer theOffer = registeredhospitals[HospitalAdd].hospitaloffer;
-        offerdetails = strConcat(theOffer.hospitalname, theOffer.description);
+        offerdetails = strConcat(theOffer.hospitalname, theOffer.offerdesc);
         for(uint i = 0; i < theOffer.coveragedepts.length; i++){
             offerdetails = strConcat(offerdetails, theOffer.coveragedepts[i]);
         }
+    }
+    
+    function GetTheVote (address PersonAdd, address HospitalAdd) constant returns(uint vote){
+        vote = registeredpatients[PersonAdd].votinglist[HospitalAdd];
+    }
+    
+    function GetTheVoteCount1 (address HospitalAdd) constant returns(uint votecount){
+        votecount = registeredhospitals[HospitalAdd].votecount1;
+    }
+    
+    function GetTheVoteCount2 (address HospitalAdd) constant returns(uint votecount){
+        votecount = registeredhospitals[HospitalAdd].votecount2;
     }
     
     function strConcat(string _a, string _b, string _c, string _d, string _e) internal returns (string){
