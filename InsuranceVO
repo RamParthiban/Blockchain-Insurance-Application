@@ -62,7 +62,7 @@ contract MSInsuranceVO {
     mapping (address => Hospital) registeredhospitals;
     mapping (uint=>mapping(address => Hospital)) historyhospital;
     
-    mapping(address=>Offer) periodoffers;
+    //mapping(address=>Offer) periodoffers;
     
     mapping(address=>Transaction) transactionbypatient;
     mapping(address=>Transaction) transactionbyhospital;
@@ -70,8 +70,8 @@ contract MSInsuranceVO {
     mapping(uint=>mapping(address=>Transaction)) historytransbyhospital;
     
     function MSInsuranceVO() { 
-        periodno = 1; 
-        startperiod = now;
+        periodno = 1; //one more constructor for next periods
+        startperiod = now; //Ocagin unix timestampini yaz
         endperiod = startperiod + 365;
         paidpremium[msg.sender] = 1;
         
@@ -138,6 +138,7 @@ contract MSInsuranceVO {
     
     function PremiumPay(address PatientAdd, uint amount) public payable {
         paidpremium[PatientAdd] = amount;
+	//transactioni nasil yapacagiz?adamdan bize para gelmesi lazim.
     }
     
     function RegisterPerson(address PatientAdd, uint amount) returns(bool registerstatus) {
@@ -163,13 +164,13 @@ contract MSInsuranceVO {
             registeredhospitals[HospitalAdd].isactive = false;
             registeredhospitals[HospitalAdd].votecount1 = 0;
             registeredhospitals[HospitalAdd].votecount2 = 0;
-            registeredhospitals[HospitalAdd].votestartdate = now;
+            registeredhospitals[HospitalAdd].votestartdate = now; //offerdan sonar baslat.
             registeredhospitals[HospitalAdd].voteenddate = registeredhospitals[HospitalAdd].votestartdate + 7 days;
             
             registerstatus = true;
         }
     }
-    
+    //Structlarin instancelarini initialize etmemiz gerekiyor mu?
     function AddOffer(address HospitalAdd, string hospitalname, string hospitaldesc) returns (bool offerstatus)  {
         offerstatus = false;
          if(CheckifHospitalRegistered(HospitalAdd)){  
@@ -227,6 +228,7 @@ contract MSInsuranceVO {
             throw;
         }
     }
+	//evaluatevotingstatusofhospital function yazilacak.
     
     function GetOfferOfHospital (address HospitalAdd) constant returns(string offerdetails){
         Offer theOffer = registeredhospitals[HospitalAdd].hospitaloffer;
