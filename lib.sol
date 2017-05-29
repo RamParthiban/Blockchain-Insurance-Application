@@ -23,6 +23,8 @@ library lib{
         uint votestartdate;
         uint voteenddate;
         
+        bool hasoffer;
+        
         Offer hospitaloffer;
     }
     
@@ -78,6 +80,4 @@ library lib{
 	   assembly { str_addr := abcde }	   
 	   return str_addr;
     }
-
-   
 }

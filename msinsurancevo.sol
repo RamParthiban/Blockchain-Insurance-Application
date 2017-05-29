@@ -61,7 +61,7 @@ contract msinsurancevo{
 
     function calculatePremium(address PersonAdd) constant returns(uint calculatedPremium){
         //to be filled, ins.
-        calculatedPremium=500;
+        calculatedPremium=10;
     }
     
     function calculateSubscription(address HospitalAdd) constant returns(uint subspercentage){
@@ -176,6 +176,7 @@ contract msinsurancevo{
             myHospital.votecount2 = 0;
             myHospital.votestartdate = now;
             myHospital.voteenddate = myHospital.votestartdate + 7 days;
+            myHospital.hasoffer = false;
             
             registerstatus = true;
         }
@@ -202,10 +203,12 @@ contract msinsurancevo{
             myHospital.hospitaloffer.hospitalname = hospitalname;
             myHospital.hospitaloffer.hospitaladdress = HospitalAdd;
             myHospital.hospitaloffer.offerdesc = hospitaldesc;
+            myHospital.hasoffer = true;
             
             periodoffers[HospitalAdd].hospitalname = hospitalname;
             periodoffers[HospitalAdd].hospitaladdress = HospitalAdd;
             periodoffers[HospitalAdd].offerdesc = hospitaldesc;
+            
             
             offerstatus = true;
          }else{
@@ -375,6 +378,9 @@ contract msinsurancevo{
         votecount = registeredhospitals[HospitalAdd].votecount2;
     }
     
+    function checkOffersOfHospital (address HospitalAdd) constant returns(bool offerstatus){
+        offerstatus = registeredhospitals[HospitalAdd].hasoffer;
+    }
     
     //
 
@@ -471,7 +477,3 @@ contract msinsurancevo{
     }
 
 }
-
-
-
-
