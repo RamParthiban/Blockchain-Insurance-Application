@@ -438,40 +438,40 @@ contract msinsurancevo{
 
 //////////////FOR TESTING IN POPULUS////////////
 
-    function getRegisteredPerson(address a) returns (address, uint, bool){
+    function getRegisteredPerson(address a) constant returns (address, uint, bool){
         lib.Patient test=registeredpatients[a];
         return (test.patientaddress,test.premium, test.premiumpaid);
 
     }
-    function getPremiumPaid(address a) returns (address, uint){
+    function getPremiumPaid(address a) constant returns (address, uint){
 
         return (a,paidpremium[a]);
 
     }
-    function getRegisteredHospital(address a) returns (address, uint, bool){
+    function getRegisteredHospital(address a) constant returns (address, uint, bool){
         lib.Hospital test=registeredhospitals[a];
         return (test.hospitaladdress,test.subspercentage, test.isregistered);
 
     }
-    function getRegisteredHospitalOffer(address a) returns (address, string, string){
+    function getRegisteredHospitalOffer(address a) constant returns (address, string, string){
         lib.Hospital test = registeredhospitals[a];
         lib.Offer testoffer = test.hospitaloffer;
         return (testoffer.hospitaladdress,testoffer.hospitalname,testoffer.offerdesc);
     }
-    function getRegisteredHospitalOfferAfterCoverage(address a) returns (string, uint, uint,string,uint,uint){
+    function getRegisteredHospitalOfferAfterCoverage(address a) constant returns (string, uint, uint,string,uint,uint){
         lib.Hospital test = registeredhospitals[a];
         lib.Offer testoffer = test.hospitaloffer;
         return (testoffer.coveragedepts[0],testoffer.prices[0],testoffer.percentages[0],testoffer.coveragedepts[1],testoffer.prices[1],testoffer.percentages[1]);
     }
-    function getPatientAmount(uint trnx) returns (uint){
+    function getPatientAmount(uint trnx) constant returns (uint){
         uint amount = allrecords[trnx].patientamount;
         return amount;
     }
-    function getHospitalAmount(uint trnx) returns (uint){
+    function getHospitalAmount(uint trnx) constant returns (uint){
         uint amount = allrecords[trnx].price;
         return amount;
     }
-    function getHospitalSubscription(uint trnx) returns (uint){
+    function getHospitalSubscription(uint trnx) constant returns (uint){
         uint subs = allrecords[trnx].subscriptionamount;
         return subs;
     }
