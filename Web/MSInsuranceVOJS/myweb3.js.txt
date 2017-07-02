@@ -1,0 +1,381 @@
+var     Web3 = require('web3');
+
+var web3 = new Web3();
+
+web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545')) ;
+var abi = [{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getRecordPatAddr","outputs":[{"name":"pataddr","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PatientAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getPatRecordPatPayStat","outputs":[{"name":"status","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"endperiod","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PatientAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getPatRecordInsrAmnt","outputs":[{"name":"insamnt","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getPerccofCoverage","outputs":[{"name":"coverperc","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PatientAdd","type":"address"}],"name":"getPatRecordCount","outputs":[{"name":"reccount","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"hospitalname","type":"string"},{"name":"hospitaldesc","type":"string"}],"name":"addOfferOfHospital","outputs":[{"name":"offerstatus","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PatientAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getPatRecordDepartment","outputs":[{"name":"deptname","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"PatAddr","type":"address"},{"name":"index","type":"uint256"}],"name":"payHospitalTheSubscription","outputs":[{"name":"paystatus","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"PatAddr","type":"address"},{"name":"index","type":"uint256"}],"name":"payPatientPartion","outputs":[{"name":"paystatus","type":"bool"}],"payable":true,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getPricecofCoverage","outputs":[{"name":"coverprice","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"deptname","type":"string"}],"name":"getPercofDeptofHos","outputs":[{"name":"perc","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"PatientAdd","type":"address"},{"name":"deptName","type":"string"}],"name":"startRecord","outputs":[{"name":"coveragestatus","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"calculateSubscription","outputs":[{"name":"subspercentage","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"trnx","type":"uint256"}],"name":"getHospitalAmount","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"paidpremium","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"a","type":"address"}],"name":"getRegisteredHospitalOfferAfterCoverage","outputs":[{"name":"","type":"string"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PatientAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getPatRecordApprStat","outputs":[{"name":"patappstat","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"displayThePeriod","outputs":[{"name":"periodnum","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"a","type":"address"}],"name":"getPremiumPaid","outputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"VoterAdd","type":"address"},{"name":"HospitalAdd","type":"address"},{"name":"vote","type":"uint256"}],"name":"voteTheHospitalForPeriod","outputs":[{"name":"votestatus","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"x","type":"address"}],"name":"frAddresstoString","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"trnx","type":"uint256"}],"name":"getPatientAmount","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"PatientAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"approvePatRecord","outputs":[{"name":"patstat","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"payPremiumToRegister","outputs":[{"name":"paystatus","type":"bool"}],"payable":true,"type":"function"},{"constant":false,"inputs":[{"name":"a","type":"address"}],"name":"getRegisteredHospital","outputs":[{"name":"","type":"address"},{"name":"","type":"uint256"},{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"displayTheVoteCount1","outputs":[{"name":"votecount","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getRecordDepartment","outputs":[{"name":"deptname","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PersonAdd","type":"address"}],"name":"calculatePremium","outputs":[{"name":"calculatedPremium","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"deptname","type":"string"}],"name":"getPriceofDeptofHos","outputs":[{"name":"price","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"displayTheMaxTrnxNum","outputs":[{"name":"trnxNum","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"trnx","type":"uint256"}],"name":"getHospitalSubscription","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"getDescofOffer","outputs":[{"name":"offerdesc","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"getHospStatus","outputs":[{"name":"hospstatus","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PersonAdd","type":"address"},{"name":"HospitalAdd","type":"address"}],"name":"displayTheVote","outputs":[{"name":"vote","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"a","type":"address"}],"name":"getRegisteredPerson","outputs":[{"name":"","type":"address"},{"name":"","type":"uint256"},{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getRecordPatPayStat","outputs":[{"name":"status","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PatientAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getPatRecordHosAddr","outputs":[{"name":"hosaddr","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"getHospNameofOffer","outputs":[{"name":"offerhospname","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"displayTheVoteCount2","outputs":[{"name":"votecount","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getTheNumberofHos","outputs":[{"name":"count","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"periodno","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"a","type":"address"}],"name":"getRegisteredHospitalOffer","outputs":[{"name":"","type":"address"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"PersonAdd","type":"address"}],"name":"registerPersontoPeriod","outputs":[{"name":"registerstatus","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"checkifHospitalRegistered","outputs":[{"name":"isregistered","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"startperiod","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PatientAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getPatRecordPatAmnt","outputs":[{"name":"patamnt","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PersonAdd","type":"address"}],"name":"checkifPersonRegistered","outputs":[{"name":"isregistered","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"trnxIdCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"PatAddr","type":"address"},{"name":"index","type":"uint256"}],"name":"payHospitalThePrice","outputs":[{"name":"paystatus","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"percentage","type":"uint256"}],"name":"registerHospitaltoPeriod","outputs":[{"name":"registerstatus","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"covdep","type":"string"},{"name":"covprice","type":"uint256"},{"name":"covperc","type":"uint256"}],"name":"addOfferCoverageOfHospital","outputs":[{"name":"coveragestatus","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PersonAdd","type":"address"}],"name":"checkifPremiumPaid","outputs":[{"name":"ispremiumpaid","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getDescofCoverage","outputs":[{"name":"coverdesc","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"getHosRecordCount","outputs":[{"name":"reccount","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getRecordHosPaidStat","outputs":[{"name":"status","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"indexval","type":"uint256"}],"name":"getTheAddrofHos","outputs":[{"name":"hospAddr","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"getCoverCountofOffer","outputs":[{"name":"covercount","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"checkOffersOfHospital","outputs":[{"name":"offerstatus","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getRecordSubscPaidStat","outputs":[{"name":"status","type":"bool"}],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"}];
+var contractaddress = "0xe982552a16fa55ae5cedb2bfb75ed018f3c8eee8" ;
+var contract = web3.eth.contract(abi).at(contractaddress);
+   
+if(!web3.isConnected()) {
+    console.log("Cannot connect to web3 provider.");
+}else{
+	console.log("Connected to web3 provider.");
+}
+
+window.w3getcontractbalance = function() {
+	console.log("CALLED FUNCTION: w3getcontractbalance with param:" + contractaddress);
+	
+	var result = web3.fromWei(web3.eth.getBalance(contractaddress));
+
+	return(result) ; 
+}
+
+window.w3getaccountbalance = function(fromaddr) {
+	console.log("CALLED FUNCTION: w3getcontractbalance with param:" + fromaddr);
+	
+	var result = web3.fromWei(web3.eth.getBalance(fromaddr));
+
+	return(result) ; 
+}
+
+window.w3loginpat = function(fromaddr,password) {
+	console.log("CALLED FUNCTION: w3loginpat with param:" + fromaddr);
+	var result = "";
+	web3.personal.unlockAccount(fromaddr,password,1800);
+	
+	if(contract.checkifPersonRegistered(fromaddr))
+		result = "REGISTERED";
+	else result = "NOTREGISTERED";
+	
+	return(result) ;
+}
+
+window.w3calcpremium = function(fromaddr) {
+	console.log("CALLED FUNCTION: w3calcpremium with param:" + fromaddr);
+	var premval = contract.calculatePremium(fromaddr);
+	
+	return(premval) ;
+}
+
+window.w3paypremium = function(fromaddr, premamount) {
+	console.log("CALLED FUNCTION: w3paypremium with param:" + fromaddr);
+	var result = "";
+	
+	var premval = contract.payPremiumToRegister({from: fromaddr, value: web3.toWei(premamount, "ether"), gas:900000});
+	
+	if(premval)	result = "OK";
+	else result = "NOTOK";
+	
+	return(result) ;
+}
+
+window.w3regpatsys = function(fromaddr) {
+	console.log("CALLED FUNCTION: w3regpatsys with param:" + fromaddr);
+	
+	var result = "";
+	var premval = contract.registerPersontoPeriod(fromaddr,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	
+	if(premval)	result = "OK";
+	else result = "NOTOK";
+	
+	return(result) ;
+}
+
+window.w3loginhos = function(fromaddr,password) {
+	console.log("CALLED FUNCTION: w3loginhos with param:" + fromaddr);
+	var result = "";
+	web3.personal.unlockAccount(fromaddr,password,900);
+	
+	if(contract.checkifHospitalRegistered(fromaddr))
+		result = "REGISTERED";
+	else result = "NOTREGISTERED";
+	
+	return(result) ; 
+}
+
+window.w3calcsubscr = function(fromaddr) {
+	console.log("CALLED FUNCTION: w3calcsubscr with param:" + fromaddr);
+	var subsval = contract.calculateSubscription(fromaddr);
+	
+	return(subsval) ;
+}
+
+window.w3reghossys = function(fromaddr, subscramount) {
+	console.log("CALLED FUNCTION: w3reghossys with param:" + fromaddr);
+	var result = "";
+	
+	var premval = contract.registerHospitaltoPeriod(fromaddr, subscramount,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	
+	if(premval)	result = "OK";
+	else result = "NOTOK";
+	
+	return(result) ;
+}
+
+window.w3checkofferofhos = function(fromaddr) {
+	console.log("CALLED FUNCTION: w3checkofferofhos with param:" + fromaddr);
+	
+	var offerstat = contract.checkOffersOfHospital(fromaddr,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	
+	return(offerstat) ;
+}
+
+window.w3addofferofhos = function(fromaddr, hospname, offdesc) {
+	console.log("CALLED FUNCTION: w3addofferofhos with param:" + fromaddr);
+	
+	var offerstat = contract.addOfferOfHospital(fromaddr,hospname,offdesc,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	
+	return(offerstat) ;
+}
+
+window.w3addcoverofhos = function(fromaddr, dept, price, covperc) {
+	console.log("CALLED FUNCTION: w3addofferofhos with param:" + fromaddr);	
+	var coverstat = contract.addOfferCoverageOfHospital(fromaddr,dept,price,covperc,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(coverstat) ;
+}
+
+window.w3getofferhosname = function(fromaddr) {
+	console.log("CALLED FUNCTION: w3getofferhosname with param:" + fromaddr);
+	var hospname = contract.getHospNameofOffer(fromaddr,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(hospname) ;
+}
+
+window.w3getofferdesc = function(fromaddr) {
+	console.log("CALLED FUNCTION: w3getofferdesc with param:" + fromaddr);
+	var offdesc = contract.getDescofOffer(fromaddr,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(offdesc) ;
+}
+
+window.w3getcovercount = function(fromaddr) {
+	console.log("CALLED FUNCTION: w3getcovercount with param:" + fromaddr);
+	var covercount = contract.getCoverCountofOffer(fromaddr,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(covercount) ;
+}
+
+window.w3getcovdept = function(fromaddr,index) {
+	console.log("CALLED FUNCTION: w3getcovdept with param:" + fromaddr);
+	var coverdept = contract.getDescofCoverage(fromaddr,index,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(coverdept) ;
+}
+
+window.w3getcovprice = function(fromaddr,index) {
+	console.log("CALLED FUNCTION: w3getcovprice with param:" + fromaddr);
+	var coverprice = contract.getPricecofCoverage(fromaddr,index,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(coverprice) ;
+}
+
+window.w3getcovperc = function(fromaddr,index) {
+	console.log("CALLED FUNCTION: w3getcovperc with param:" + fromaddr);
+	var coverperc = contract.getPerccofCoverage(fromaddr,index,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(coverperc) ;
+}
+
+window.w3gethospstat = function(fromaddr) {
+	console.log("CALLED FUNCTION: w3gethospstat with param:" + fromaddr);
+	var hospstat = contract.getHospStatus(fromaddr,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(hospstat) ;
+}
+
+window.w3gethosreccount = function(fromaddr) {
+	console.log("CALLED FUNCTION: w3gethosreccount with param:" + fromaddr);
+	var hosreccount = contract.getHosRecordCount(fromaddr,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(hosreccount) ;
+}
+
+window.w3gethosrecpataddr = function(fromaddr,index) {
+	console.log("CALLED FUNCTION: w3gethosrecpataddr with param:" + fromaddr);
+	var rtrn = contract.getRecordPatAddr(fromaddr, index, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3gethosrecdept = function(fromaddr,index) {
+	console.log("CALLED FUNCTION: w3gethosrecdept with param:" + fromaddr);
+	var rtrn = contract.getRecordDepartment(fromaddr, index, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3gethosrecpatpaystat = function(fromaddr,index) {
+	console.log("CALLED FUNCTION: w3gethosrecpatpaystat with param:" + fromaddr);
+	var rtrn = contract.getRecordPatPayStat(fromaddr, index, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3gethosrechospaystat = function(fromaddr,index) {
+	console.log("CALLED FUNCTION: w3gethosrechospaystat with param:" + fromaddr);
+	var rtrn = contract.getRecordHosPaidStat(fromaddr, index, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3gethosrecsubspaystat = function(fromaddr,index) {
+	console.log("CALLED FUNCTION: w3gethosrecsubspaystat with param:" + fromaddr);
+	var rtrn = contract.getRecordSubscPaidStat(fromaddr, index, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3addrecordofhos = function(fromaddr, pataddr, deptname) {
+	console.log("CALLED FUNCTION: w3addrecordofhos with param:" + fromaddr + "-"+pataddr+"-"+deptname );
+	var rtrn = contract.startRecord(fromaddr,pataddr,deptname,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3getpriceofdept = function(fromaddr, deptname) {
+	console.log("CALLED FUNCTION: w3getpriceofdept with param:" + fromaddr);
+	var rtrn = contract.getPriceofDeptofHos(fromaddr, deptname, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3getpercofdept = function(fromaddr, deptname) {
+	console.log("CALLED FUNCTION: w3getpercofdept with param:" + fromaddr);
+	var rtrn = contract.getPercofDeptofHos(fromaddr, deptname, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3getaddrcount = function(fromaddr, deptname) {
+	console.log("CALLED FUNCTION: w3getaddrcount with param:" + fromaddr);
+	var rtrn = contract.getTheNumberofHos({from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3gethosadd = function(fromaddr,index) {
+	console.log("CALLED FUNCTION: w3getaddrcount with param:" + fromaddr);
+	var rtrn = contract.getTheAddrofHos(index,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3patvotetheoff = function(fromaddr, hostaddr, votetype) {
+	console.log("CALLED FUNCTION: w3patvotetheoff with param:" + fromaddr);
+	var rtrn = contract.voteTheHospitalForPeriod(fromaddr, hostaddr, votetype, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3getpatreccount = function(fromaddr) {
+	console.log("CALLED FUNCTION: w3getpatreccount with param:" + fromaddr);
+	var patreccount = contract.getPatRecordCount(fromaddr,{from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(patreccount) ;
+}
+
+window.w3getpatrechosaddr = function(fromaddr,index) {
+	console.log("CALLED FUNCTION: w3getpatrechosaddr with param:" + fromaddr);
+	var rtrn = contract.getPatRecordHosAddr(fromaddr, index, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3getpatrecdept = function(fromaddr,index) {
+	console.log("CALLED FUNCTION: w3getpatrecdept with param:" + fromaddr);
+	var rtrn = contract.getPatRecordDepartment(fromaddr, index, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3getpatrecpatpaystat = function(fromaddr,index) {
+	console.log("CALLED FUNCTION: w3getpatrecpatpaystat with param:" + fromaddr);
+	var rtrn = contract.getPatRecordPatPayStat(fromaddr, index, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3getpatrecinsamnt = function(fromaddr,index) {
+	console.log("CALLED FUNCTION: w3getpatrecinsamnt with param:" + fromaddr);
+	var rtrn = contract.getPatRecordInsrAmnt(fromaddr, index, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3getpatrecpatamnt = function(fromaddr,index) {
+	console.log("CALLED FUNCTION: w3getpatrecpatamnt with param:" + fromaddr);
+	var rtrn = contract.getPatRecordPatAmnt(fromaddr, index, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3getpatrecisappr = function(fromaddr, index) {
+	console.log("CALLED FUNCTION: w3getpatrecisappr with param:" + fromaddr);
+	var rtrn = contract.getPatRecordApprStat(fromaddr, index, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3patapprrec = function(fromaddr, index) {
+	console.log("CALLED FUNCTION: w3patapprrec with param:" + fromaddr + index);
+	var rtrn = contract.approvePatRecord(fromaddr, index, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3gethospatvotestat = function(fromaddr, hosaddr) {
+	console.log("CALLED FUNCTION: w3gethospatvotestat with param:" + fromaddr);
+	var rtrn = contract.displayTheVote(fromaddr, hosaddr, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3gethosvote1count = function(fromaddr) {
+	console.log("CALLED FUNCTION: w3gethosvote1count with param:" + fromaddr);
+	var rtrn = contract.displayTheVoteCount1(fromaddr, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3gethosvote2count = function(fromaddr) {
+	console.log("CALLED FUNCTION: w3gethosvote2count with param:" + fromaddr);
+	var rtrn = contract.displayTheVoteCount2(fromaddr, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3patmakerecpaym = function(fromaddr, index, amnt) {
+	console.log("CALLED FUNCTION: w3patmakerecpaym with param:" + fromaddr);
+	var rtrn = contract.payPatientPartion(fromaddr, index, {from: fromaddr, value: web3.toWei(amnt, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3makehospaym = function(fromaddr, index) {
+	console.log("CALLED FUNCTION: w3makehospaym with param:" + fromaddr);
+	var rtrn = contract.payHospitalThePrice(fromaddr, index, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.w3makesubspaym = function(fromaddr, index) {
+	console.log("CALLED FUNCTION: w3makesubspaym with param:" + fromaddr);
+	var rtrn = contract.payHospitalTheSubscription(fromaddr, index, {from: fromaddr, value: web3.toWei(0, "ether"), gas:900000});
+	return(rtrn) ;
+}
+
+window.mycallcontract = function(fromaddr,password,argno,amnt,gasamnt) {
+	console.log("CALLED FUNCTION: mycallcontract with param:" + fromaddr);
+   web3.personal.unlockAccount(fromaddr,password,5);
+
+   var abi = [{"constant":true,"inputs":[],"name":"endperiod","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"hospitalname","type":"string"},{"name":"hospitaldesc","type":"string"}],"name":"addOfferOfHospital","outputs":[{"name":"offerstatus","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"PatientAdd","type":"address"},{"name":"deptName","type":"string"},{"name":"price","type":"uint256"},{"name":"coverage","type":"uint256"}],"name":"startRecord","outputs":[{"name":"coveragestatus","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"calculateSubscription","outputs":[{"name":"subspercentage","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"paidpremium","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"displayThePeriod","outputs":[{"name":"periodnum","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"recId","type":"uint256"}],"name":"displayRecordDetails","outputs":[{"name":"recdetails","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"trnx","type":"uint256"}],"name":"payPatientPartion","outputs":[{"name":"paystatus","type":"bool"}],"payable":true,"type":"function"},{"constant":false,"inputs":[{"name":"VoterAdd","type":"address"},{"name":"HospitalAdd","type":"address"},{"name":"vote","type":"uint256"}],"name":"voteTheHospitalForPeriod","outputs":[{"name":"votestatus","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"x","type":"address"}],"name":"frAddresstoString","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"v","type":"uint256"}],"name":"frUintToString","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"payPremiumToRegister","outputs":[{"name":"paystatus","type":"bool"}],"payable":true,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"displayTheVoteCount1","outputs":[{"name":"votecount","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PersonAdd","type":"address"}],"name":"calculatePremium","outputs":[{"name":"calculatedPremium","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"displayTheMaxTrnxNum","outputs":[{"name":"trnxNum","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PersonAdd","type":"address"}],"name":"checkifPreimumPaid","outputs":[{"name":"ispremiumpaid","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PersonAdd","type":"address"},{"name":"HospitalAdd","type":"address"}],"name":"displayTheVote","outputs":[{"name":"vote","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"displayTheVoteCount2","outputs":[{"name":"votecount","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"periodno","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"displayOffersOfHospital","outputs":[{"name":"offerdetails","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"PersonAdd","type":"address"}],"name":"registerPersontoPeriod","outputs":[{"name":"registerstatus","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"checkifHospitalRegistered","outputs":[{"name":"isregistered","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"startperiod","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PersonAdd","type":"address"}],"name":"checkifPersonRegistered","outputs":[{"name":"isregistered","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"trnxIdCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"percentage","type":"uint256"}],"name":"registerHospitaltoPeriod","outputs":[{"name":"registerstatus","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"covdep","type":"string"},{"name":"covprice","type":"uint256"},{"name":"covperc","type":"uint256"}],"name":"addOfferCoverageOfHospital","outputs":[{"name":"coveragestatus","type":"bool"}],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"}] ;
+
+   var contractaddress = "0xf2ab7b4f37fd993be97270568db15717a4916802" ;
+   var contract = web3.eth.contract(abi).at(contractaddress);
+   rc = contract.addno(argno,{from: fromaddr, value: web3.toWei(amnt, "ether"), gas:900000}) ;
+   return(rc) ; 
+}
+
+window.setCookie = function (cname, cvalue) {
+	console.log("LOG: SetCookie: " + cname + "=" + cvalue);
+	var exthours = 1;
+    var d = new Date();
+    d.setTime(d.getTime() + (exthours*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+	
+	return "OK";
+}
+
+window.getCookie = function (cname) {
+	var resultval = "";
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+	
+    var ca = decodedCookie.split(';');
+	
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            resultval = c.substring(name.length, c.length);
+        }
+    }
+	
+	console.log("LOG: GetCookie: " + cname + "=" + resultval);
+	
+    return resultval;
+}
+
+window.checkCookie = function () {
+    var username = getCookie("username");
+    if (username != "") {
+        alert("Welcome again " + username);
+    } else {
+        username = prompt("Please enter your name:", "");
+        if (username != "" && username != null) {
+            setCookie("username", username, 365);
+        }
+    }
+}

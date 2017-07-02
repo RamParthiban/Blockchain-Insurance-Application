@@ -1,0 +1,156 @@
+var web3_extended = require('web3_ipc');
+
+var options = {
+  host: 'http://localhost:8545',
+  ipc:false,
+  personal: true,
+  admin: true,
+  debug: true
+};
+
+var web3 = web3_extended.create(options);
+
+if(!web3.isConnected())
+    console.log("not connected");
+else
+    console.log("connected");
+
+address = "0x555a879f13d4872fcf712fb2af1e5e525e0fdaed";
+
+abi = [{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getRecordPatAddr","outputs":[{"name":"pataddr","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"endperiod","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getPerccofCoverage","outputs":[{"name":"coverperc","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"hospitalname","type":"string"},{"name":"hospitaldesc","type":"string"}],"name":"addOfferOfHospital","outputs":[{"name":"offerstatus","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getPricecofCoverage","outputs":[{"name":"coverprice","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"trnx","type":"uint256"}],"name":"payHospitalTheSubscription","outputs":[{"name":"paystatus","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"deptname","type":"string"}],"name":"getPercofDeptofHos","outputs":[{"name":"perc","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"PatientAdd","type":"address"},{"name":"deptName","type":"string"}],"name":"startRecord","outputs":[{"name":"coveragestatus","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"calculateSubscription","outputs":[{"name":"subspercentage","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"trnx","type":"uint256"}],"name":"getHospitalAmount","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"paidpremium","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"a","type":"address"}],"name":"getRegisteredHospitalOfferAfterCoverage","outputs":[{"name":"","type":"string"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"displayThePeriod","outputs":[{"name":"periodnum","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"trnx","type":"uint256"}],"name":"payPatientPartion","outputs":[{"name":"paystatus","type":"bool"}],"payable":true,"type":"function"},{"constant":false,"inputs":[{"name":"a","type":"address"}],"name":"getPremiumPaid","outputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"VoterAdd","type":"address"},{"name":"HospitalAdd","type":"address"},{"name":"vote","type":"uint256"}],"name":"voteTheHospitalForPeriod","outputs":[{"name":"votestatus","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"x","type":"address"}],"name":"frAddresstoString","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"trnx","type":"uint256"}],"name":"getPatientAmount","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"payPremiumToRegister","outputs":[{"name":"paystatus","type":"bool"}],"payable":true,"type":"function"},{"constant":false,"inputs":[{"name":"a","type":"address"}],"name":"getRegisteredHospital","outputs":[{"name":"","type":"address"},{"name":"","type":"uint256"},{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"displayTheVoteCount1","outputs":[{"name":"votecount","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getRecordDepartment","outputs":[{"name":"deptname","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PersonAdd","type":"address"}],"name":"calculatePremium","outputs":[{"name":"calculatedPremium","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"deptname","type":"string"}],"name":"getPriceofDeptofHos","outputs":[{"name":"price","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"displayTheMaxTrnxNum","outputs":[{"name":"trnxNum","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"trnx","type":"uint256"}],"name":"getHospitalSubscription","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"getDescofOffer","outputs":[{"name":"offerdesc","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"getHospStatus","outputs":[{"name":"hospstatus","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PersonAdd","type":"address"},{"name":"HospitalAdd","type":"address"}],"name":"displayTheVote","outputs":[{"name":"vote","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"a","type":"address"}],"name":"getRegisteredPerson","outputs":[{"name":"","type":"address"},{"name":"","type":"uint256"},{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getRecordPatPayStat","outputs":[{"name":"status","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"getHospNameofOffer","outputs":[{"name":"offerhospname","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"displayTheVoteCount2","outputs":[{"name":"votecount","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"periodno","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"a","type":"address"}],"name":"getRegisteredHospitalOffer","outputs":[{"name":"","type":"address"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"PersonAdd","type":"address"}],"name":"registerPersontoPeriod","outputs":[{"name":"registerstatus","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"checkifHospitalRegistered","outputs":[{"name":"isregistered","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"startperiod","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PersonAdd","type":"address"}],"name":"checkifPersonRegistered","outputs":[{"name":"isregistered","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"trnxIdCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"percentage","type":"uint256"}],"name":"registerHospitaltoPeriod","outputs":[{"name":"registerstatus","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"covdep","type":"string"},{"name":"covprice","type":"uint256"},{"name":"covperc","type":"uint256"}],"name":"addOfferCoverageOfHospital","outputs":[{"name":"coveragestatus","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"PersonAdd","type":"address"}],"name":"checkifPremiumPaid","outputs":[{"name":"ispremiumpaid","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getDescofCoverage","outputs":[{"name":"coverdesc","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"getHosRecordCount","outputs":[{"name":"reccount","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getRecordHosPaidStat","outputs":[{"name":"status","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"trnx","type":"uint256"}],"name":"payHospitalThePrice","outputs":[{"name":"paystatus","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"getCoverCountofOffer","outputs":[{"name":"covercount","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"}],"name":"checkOffersOfHospital","outputs":[{"name":"offerstatus","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"HospitalAdd","type":"address"},{"name":"index","type":"uint256"}],"name":"getRecordSubscPaidStat","outputs":[{"name":"status","type":"bool"}],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"}]
+var msinsurancevo = web3.eth.contract(abi).at(address);
+gasLimit = 4000000;
+
+var sleep = require('sleep'); 
+
+//SLEEP Function. waits until transaction is completed. This function is written with the help of Teaching Assistant, Alper Alimoglu.
+function sleepTillTransactionCompleted( tx ) {
+    var receipt = web3.eth.getTransactionReceipt( tx );
+    console.log(receipt)
+
+    while(true){
+	   if( (receipt != null) ) {
+		  var status          = web3.debug.traceTransaction( tx );
+		  if(status.structLogs[status.structLogs.length-1].error == null)
+			 break;
+	   }
+	   receipt = web3.eth.getTransactionReceipt( tx );
+	   //console.log( receipt )
+	   sleep.sleep(5) //sleep olmazsa donuyor.
+    }
+
+}
+
+//TEST START:
+
+check=msinsurancevo.checkifPersonRegistered("0x71d86900335b93560d4e71f752d89582a01ac1f4");
+console.log(check);
+
+
+    
+check=msinsurancevo.checkifPremiumPaid("0x71d86900335b93560d4e71f752d89582a01ac1f4");
+console.log(check);
+
+check=msinsurancevo.calculatePremium("0x71d86900335b93560d4e71f752d89582a01ac1f4");
+console.log(check);
+
+prebalance = web3.eth.getBalance("0x71d86900335b93560d4e71f752d89582a01ac1f4");
+console.log(prebalance);
+tx=msinsurancevo.payPremiumToRegister({from: web3.eth.accounts[0], value: check ,gas:gasLimit});
+sleepTillTransactionCompleted( tx )
+check=msinsurancevo.checkifPremiumPaid("0x71d86900335b93560d4e71f752d89582a01ac1f4");
+console.log(check);
+
+
+postbalance = web3.eth.getBalance("0x71d86900335b93560d4e71f752d89582a01ac1f4");
+console.log(postbalance);
+
+tx=msinsurancevo.registerPersontoPeriod("0x71d86900335b93560d4e71f752d89582a01ac1f4", {from: web3.eth.accounts[0], gas:gasLimit });
+
+sleepTillTransactionCompleted( tx )
+
+check=msinsurancevo.checkifPersonRegistered("0x71d86900335b93560d4e71f752d89582a01ac1f4");
+console.log(check);
+
+
+
+tx=msinsurancevo.checkifHospitalRegistered(web3.eth.accounts[0], {from: web3.eth.accounts[0], gas:gasLimit });
+sleepTillTransactionCompleted( tx )
+
+
+
+check=msinsurancevo.calculateSubscription(web3.eth.accounts[0]);
+console.log(check);
+
+tx=msinsurancevo.registerHospitaltoPeriod(web3.eth.accounts[0],check, {from: web3.eth.accounts[0], gas:gasLimit });
+sleepTillTransactionCompleted( tx )
+check=msinsurancevo.checkifHospitalRegistered(web3.eth.accounts[0]);
+console.log(check);
+
+
+
+tx=msinsurancevo.addOfferOfHospital(web3.eth.accounts[0],"Acibadem","TestDescription", {from: web3.eth.accounts[0], gas:gasLimit });
+sleepTillTransactionCompleted( tx )
+
+
+tx=msinsurancevo.addOfferCoverageOfHospital(web3.eth.accounts[0],"KBB",100,80, {from: web3.eth.accounts[0], gas:gasLimit });
+sleepTillTransactionCompleted( tx )
+tx=msinsurancevo.addOfferCoverageOfHospital(web3.eth.accounts[0],"Goz",500,50, {from: web3.eth.accounts[0], gas:gasLimit });
+sleepTillTransactionCompleted( tx )
+
+ 
+
+check=msinsurancevo.displayTheVote(web3.eth.accounts[0],web3.eth.accounts[0]);
+console.log(check);
+ check=msinsurancevo.displayTheVoteCount1(web3.eth.accounts[0]);
+console.log(check);
+check=msinsurancevo.displayTheVoteCount2(web3.eth.accounts[0]);
+console.log(check);
+
+tx=msinsurancevo.voteTheHospitalForPeriod(web3.eth.accounts[0],web3.eth.accounts[0],1,{from: web3.eth.accounts[0], gas:gasLimit });
+sleepTillTransactionCompleted( tx )
+check=msinsurancevo.displayTheVote(web3.eth.accounts[0],web3.eth.accounts[0]);
+console.log(check);
+msinsurancevo.displayTheVoteCount1(web3.eth.accounts[0]);
+
+msinsurancevo.displayTheVoteCount2(web3.eth.accounts[0]);
+
+
+
+
+tx = msinsurancevo.startRecord(web3.eth.accounts[0],web3.eth.accounts[0],"KBB",100,80, {from: web3.eth.accounts[0], gas:gasLimit });
+sleepTillTransactionCompleted( tx )
+prebalance = web3.eth.getBalance(web3.eth.accounts[0]);
+console.log(prebalance); 
+
+tx=msinsurancevo.payPatientPartion(1,{from: web3.eth.accounts[0], value: amount});
+sleepTillTransactionCompleted( tx )
+postbalance = web3.eth.getBalance(web3.eth.accounts[0]);
+console.log(postbalance); 
+    
+
+prebalancehosp = web3.eth.getBalance(web3.eth.accounts[0]);
+console.log(prebalancehosp);
+
+tx=msinsurancevo.payHospitalThePrice(1,{from: web3.eth.accounts[0], value: amount});
+sleepTillTransactionCompleted( tx )
+postbalance = web3.eth.getBalance(web3.eth.accounts[0]);
+console.log(postbalance);
+
+prebalancehosp = web3.eth.getBalance(web3.eth.accounts[0]);
+console.log(prebalancehosp);
+
+tx=msinsurancevo.payHospitalTheSubscription(1,{from: web3.eth.accounts[0], value: subs});
+sleepTillTransactionCompleted( tx )
+postbalance = web3.eth.getBalance(web3.eth.accounts[0]);
+console.log(postbalance);
+
+maxtrnxnum = msinsurancevo.displayTheMaxTrnxNum();
+console.log(maxtrnxnum);
+
+periodno = msinsurancevo.displayThePeriod();
+console.log(periodno);
+
+
+
+

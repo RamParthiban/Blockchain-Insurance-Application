@@ -1,0 +1,40 @@
+function callf(a,b) {
+	var ia = parseInt(a);
+	var ib = parseInt(b);
+	return(contract.f(ia,ib))
+}
+
+var Web3 = require('web3'); 
+var web3 = new Web3(); 
+web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
+
+var abi = [{"constant":true,"inputs":[{"name":"a","type":"uint256"},{"name":"b","type":"uint256"}], "name":"f","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"}]
+
+var contractaddress = "0x0a369d1f06adca3be0ff14a5340d8186e296b8e8";
+var contract = web3.eth.contract(abi).at(contractaddress);
+
+if(!web3.isConnected()) {
+	console.log("not connected");
+}
+
+var express = require('express'); 
+var app = express();
+var bodyParser = require('body-parser');
+
+// Create application/x-www-form-urlencoded parser 
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+app.use(express.static('.'));
+
+app.get('/f/:a/:b', function (req, res) {
+	res.setHeader('Content-Type', 'application/json');
+	var fvalue = callf(req.params["a"],req.params["b"]) ;
+	res.send(JSON.stringify(fvalue));
+});
+
+var server = app.listen(8081, function () {
+	var host =	server.address().address
+	var port = server.address().port
+	
+	console.log("Example app listening at http://%s:%s", host, port)
+})

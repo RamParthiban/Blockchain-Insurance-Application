@@ -15,16 +15,16 @@ contract msinsurancevo{
     
     mapping (address => uint) public paidpremium ;
     
+    
     mapping (address => lib.Patient) registeredpatients ;
     mapping (uint => mapping(address => lib.Patient)) historypatient;
     
     mapping (address => lib.Hospital) registeredhospitals;
     mapping (uint => mapping(address => lib.Hospital)) historyhospital;
+    address[] reghospitaladdrs;
     
     mapping(address => lib.Offer) periodoffers;
     
-    mapping(address => lib.Record) recordbypatient;
-    mapping(address => lib.Record) recordbyhospital;
     mapping(uint => lib.Record) allrecords;
     
     mapping(uint => mapping(address=>lib.Record)) historytransbypatient;
@@ -61,7 +61,7 @@ contract msinsurancevo{
 
     function calculatePremium(address PersonAdd) constant returns(uint calculatedPremium){
         //to be filled, ins.
-        calculatedPremium=10;
+        calculatedPremium=500;
     }
     
     function calculateSubscription(address HospitalAdd) constant returns(uint subspercentage){
@@ -97,8 +97,10 @@ contract msinsurancevo{
         paystatus = true;
     }
 
-    function payPatientPartion(uint trnx) public payable returns (bool paystatus) {
+    function payPatientPartion(address PatAddr, uint index) public payable returns (bool paystatus) {
         paystatus = false;
+        uint trnx = registeredpatients[PatAddr].patrecordids[index];
+        
         if(allrecords[trnx].isactive){
             address hsptAddr = allrecords[trnx].hospitaladdress;
             address patAddr = allrecords[trnx].patientaddress;
@@ -107,8 +109,6 @@ contract msinsurancevo{
             if(!allrecords[trnx].doespatientpay){
                 if(msg.value >= amount){
                     allrecords[trnx].doespatientpay = true;
-                    recordbyhospital[hsptAddr].doespatientpay = true;
-                    recordbypatient[patAddr].doespatientpay = true;
                     
                     paystatus = true;
                 }else throw;
@@ -117,44 +117,60 @@ contract msinsurancevo{
 
     }
 
-    function payHospitalThePrice(uint trnx) returns (bool paystatus) {
+    function payHospitalThePrice(address PatAddr, uint index) returns (bool paystatus) {
         paystatus = false;
+        uint trnx = registeredpatients[PatAddr].patrecordids[index];
+        
         if(allrecords[trnx].isactive){
             address hsptAddr = allrecords[trnx].hospitaladdress;
             address patAddr = allrecords[trnx].patientaddress;
             uint amount = allrecords[trnx].price;
             
             if(!allrecords[trnx].ishospitalpaid && allrecords[trnx].doespatientpay){
-                hsptAddr.send(amount);
+                if(amount == 100) hsptAddr.send(100 ether);
+                if(amount == 200) hsptAddr.send(200 ether);
+                if(amount == 300) hsptAddr.send(300 ether);
+                if(amount == 400) hsptAddr.send(400 ether);
+                if(amount == 500) hsptAddr.send(500 ether);
+                if(amount == 600) hsptAddr.send(600 ether);
+                if(amount == 700) hsptAddr.send(700 ether);
+                if(amount == 800) hsptAddr.send(800 ether);
+                if(amount == 900) hsptAddr.send(900 ether);
+                if(amount == 1000) hsptAddr.send(1000 ether);
                 
                 allrecords[trnx].ishospitalpaid = true;
-                recordbyhospital[hsptAddr].ishospitalpaid = true;
-                recordbypatient[patAddr].ishospitalpaid = true;
                 
                 paystatus = true;
             }else throw;
         }else throw;
     }
     
-    function payHospitalTheSubscription(uint trnx) returns (bool paystatus) {
+    function payHospitalTheSubscription(address PatAddr, uint index) returns (bool paystatus) {
         paystatus = false;
+        uint trnx = registeredpatients[PatAddr].patrecordids[index];
+        
         if(allrecords[trnx].isactive){
             address hsptAddr = allrecords[trnx].hospitaladdress;
             address patAddr = allrecords[trnx].patientaddress;
             uint amount = allrecords[trnx].subscriptionamount;
              
             if(!allrecords[trnx].issubspaid && allrecords[trnx].ishospitalpaid && allrecords[trnx].doespatientpay){
-                hsptAddr.send(amount);
+                if(amount == 2) hsptAddr.send(2 ether);
+                if(amount == 4) hsptAddr.send(4 ether);
+                if(amount == 6) hsptAddr.send(6 ether);
+                if(amount == 8) hsptAddr.send(8 ether);
+                if(amount == 10) hsptAddr.send(10);
+                if(amount == 12) hsptAddr.send(12 ether);
+                if(amount == 14) hsptAddr.send(14 ether);
+                if(amount == 16) hsptAddr.send(16 ether);
+                if(amount == 18) hsptAddr.send(18 ether);
+                if(amount == 20) hsptAddr.send(20 ether);
                 
                 allrecords[trnx].issubspaid = true;
-                recordbyhospital[hsptAddr].issubspaid = true;
-                recordbypatient[patAddr].issubspaid = true;
             }else throw;
             
             if(allrecords[trnx].doespatientpay && allrecords[trnx].ishospitalpaid && allrecords[trnx].issubspaid){
                 allrecords[trnx].isactive = false;
-                recordbyhospital[hsptAddr].isactive = false;
-                recordbypatient[patAddr].isactive = false;
             }
             
             paystatus = true;
@@ -177,8 +193,11 @@ contract msinsurancevo{
             myHospital.votestartdate = now;
             myHospital.voteenddate = myHospital.votestartdate + 7 days;
             myHospital.hasoffer = false;
+            myHospital.recordcount = 0;
             
             registerstatus = true;
+            
+            reghospitaladdrs.push(HospitalAdd);
         }
     }
 
@@ -203,12 +222,13 @@ contract msinsurancevo{
             myHospital.hospitaloffer.hospitalname = hospitalname;
             myHospital.hospitaloffer.hospitaladdress = HospitalAdd;
             myHospital.hospitaloffer.offerdesc = hospitaldesc;
+            myHospital.hospitaloffer.covercount = 0;
             myHospital.hasoffer = true;
             
             periodoffers[HospitalAdd].hospitalname = hospitalname;
             periodoffers[HospitalAdd].hospitaladdress = HospitalAdd;
             periodoffers[HospitalAdd].offerdesc = hospitaldesc;
-            
+            periodoffers[HospitalAdd].covercount = 0;
             
             offerstatus = true;
          }else{
@@ -223,10 +243,12 @@ contract msinsurancevo{
             myHospital.hospitaloffer.coveragedepts.push(covdep);
             myHospital.hospitaloffer.prices.push(covprice);
             myHospital.hospitaloffer.percentages.push(covperc);
+            myHospital.hospitaloffer.covercount = myHospital.hospitaloffer.covercount + 1;
 
             periodoffers[HospitalAdd].coveragedepts.push(covdep);
             periodoffers[HospitalAdd].prices.push(covprice);
             periodoffers[HospitalAdd].percentages.push(covperc);
+            periodoffers[HospitalAdd].covercount = periodoffers[HospitalAdd].covercount + 1;
             
             coveragestatus = true;
         }else
@@ -259,68 +281,49 @@ contract msinsurancevo{
         }
     }
     
-    function startRecord(address HospitalAdd, address PatientAdd, string deptName, uint price, uint coverage) returns (bool coveragestatus) {
-        lib.Record myRecord = recordbyhospital[HospitalAdd];
-        lib.Record myRecordP = recordbypatient[PatientAdd];
+    function startRecord(address HospitalAdd, address PatientAdd, string deptName) returns (bool coveragestatus) {
+        uint price = getPriceofDeptofHos(HospitalAdd,deptName);
+        uint coverage = getPercofDeptofHos(HospitalAdd,deptName);
+        
         lib.Record myRecordAll = allrecords[trnxIdCount];
 
-        myRecordP.hospitaladdress = HospitalAdd;
-        myRecord.hospitaladdress = HospitalAdd;
         myRecordAll.hospitaladdress = HospitalAdd;
         
-        myRecordP.patientaddress = PatientAdd;
-        myRecord.patientaddress = PatientAdd;
         myRecordAll.patientaddress = PatientAdd;
         
-        myRecordP.date = now;
-        myRecord.date = now;
         myRecordAll.date = now;
         
-        myRecordP.department = deptName;
-        myRecord.department = deptName;
         myRecordAll.department = deptName;
-        
-        myRecordP.price = price;
-        myRecord.price = price;
+
         myRecordAll.price = price;
         
-        myRecordP.coverage = coverage;
-        myRecord.coverage = coverage;
         myRecordAll.coverage = coverage;
         
-        myRecordP.insuredamount = price * coverage / 100;
-        myRecord.insuredamount = price * coverage / 100;
         myRecordAll.insuredamount = price * coverage / 100;
-        
-        myRecordP.patientamount = price - (price * coverage / 100 );
-        myRecord.patientamount =  price - (price * coverage / 100);
+
         myRecordAll.patientamount =  price - (price * coverage / 100);
         
-        myRecordP.subscriptionamount = price * registeredhospitals[HospitalAdd].subspercentage / 100;
-        myRecord.subscriptionamount = price * registeredhospitals[HospitalAdd].subspercentage / 100;
         myRecordAll.subscriptionamount = price * registeredhospitals[HospitalAdd].subspercentage / 100;
         
         if(myRecordAll.patientamount == 0){
-            myRecordP.doespatientpay = true;
-            myRecord.doespatientpay = true;
             myRecordAll.doespatientpay = true;
         }else{
-            myRecordP.doespatientpay = false;
-            myRecord.doespatientpay = false;
             myRecordAll.doespatientpay = false;
         }
         
-        myRecordP.ishospitalpaid = false;
-        myRecord.ishospitalpaid = false;
+        myRecordAll.ispatapproved = false;
+        
         myRecordAll.ishospitalpaid = false;
         
-        myRecordP.issubspaid = false;
-        myRecord.issubspaid = false;
         myRecordAll.issubspaid = false;
         
-        myRecordP.isactive = true;
-        myRecord.isactive = true;
         myRecordAll.isactive = true;
+        
+        registeredhospitals[HospitalAdd].hosprecordids.push(trnxIdCount);
+        registeredhospitals[HospitalAdd].recordcount ++;
+        
+        registeredpatients[PatientAdd].patrecordids.push(trnxIdCount);
+        registeredpatients[PatientAdd].recordcount ++;
         
         trnxIdCount = trnxIdCount + 1;
     }
@@ -335,35 +338,161 @@ contract msinsurancevo{
         trnxNum = trnxIdCount -1;
     }
     
-    function displayRecordDetails (uint recId) constant returns(string recdetails){
-        lib.Record rec = allrecords[recId];
-        recdetails = "";
+    function getHospNameofOffer (address HospitalAdd) constant returns(string offerhospname){
+        lib.Offer theOffer = registeredhospitals[HospitalAdd].hospitaloffer;
+        offerhospname = theOffer.hospitalname;
 
-        
-        if(rec.doespatientpay) recdetails = strConcat(recdetails, "DoesPatientPay:", "TRUE", "--");
-        else recdetails = strConcat(recdetails, "DoesPatientPay:", "FALSE", "--");
-        
-        if(rec.ishospitalpaid) recdetails = strConcat(recdetails, "IsHospitalPaid:", "TRUE", "--");
-        else recdetails = strConcat(recdetails, "IsHospitalPaid:", "FALSE", "--");
-        
-        if(rec.issubspaid) recdetails = strConcat(recdetails, "IsSubsPaid:", "TRUE", "--");
-        else recdetails = strConcat(recdetails, "IsSubsPaid:", "FALSE", "--");
-        
-        if(rec.isactive) recdetails = strConcat(recdetails, "IsActive:", "TRUE", "--");
-        else recdetails = strConcat(recdetails, "IsActive:", "FALSE", "--");
-       return recdetails;
     }
     
-    function displayOffersOfHospital (address HospitalAdd) constant returns(string offerdetails){
+    function getDescofOffer (address HospitalAdd) constant returns(string offerdesc){
         lib.Offer theOffer = registeredhospitals[HospitalAdd].hospitaloffer;
-        offerdetails = strConcat(theOffer.hospitalname, theOffer.offerdesc, "--");
-        
-        for(uint i = 0; i < theOffer.coveragedepts.length; i++){
-            offerdetails = strConcat(offerdetails, theOffer.coveragedepts[i], "--");
-            offerdetails = strConcat(offerdetails, frUintToString(theOffer.prices[i]), "--");
-            offerdetails = strConcat(offerdetails, frUintToString(theOffer.percentages[i]), "--");
-        }
+        offerdesc = theOffer.offerdesc;
 
+    }
+    
+    function getCoverCountofOffer (address HospitalAdd) constant returns(uint covercount){
+        lib.Offer theOffer = registeredhospitals[HospitalAdd].hospitaloffer;
+        covercount = theOffer.covercount;
+    }
+    
+    function getDescofCoverage (address HospitalAdd, uint index) constant returns(string coverdesc){
+        lib.Offer theOffer = registeredhospitals[HospitalAdd].hospitaloffer;
+        coverdesc = theOffer.coveragedepts[index];
+    }
+    
+    function getPricecofCoverage (address HospitalAdd, uint index) constant returns(uint coverprice){
+        lib.Offer theOffer = registeredhospitals[HospitalAdd].hospitaloffer;
+        coverprice = theOffer.prices[index];
+    }
+    
+    function getPerccofCoverage (address HospitalAdd, uint index) constant returns(uint coverperc){
+        lib.Offer theOffer = registeredhospitals[HospitalAdd].hospitaloffer;
+        coverperc = theOffer.percentages[index];
+    }
+    
+    function getHospStatus (address HospitalAdd) constant returns(string hospstatus){
+        lib.Hospital theHospital = registeredhospitals[HospitalAdd];
+        if (theHospital.isinvotestage)  hospstatus = "ISINVOTE";
+        else{
+            if(theHospital.isactive) hospstatus = "ACTIVE";
+            else hospstatus = "PASSIVE";
+        }
+    }
+    
+    function getHosRecordCount (address HospitalAdd) constant returns(uint reccount){
+        lib.Hospital theHospital = registeredhospitals[HospitalAdd];
+        reccount = theHospital.recordcount;
+    }
+    
+    function getRecordPatAddr (address HospitalAdd, uint index) constant returns(address pataddr){
+        lib.Hospital theHospital = registeredhospitals[HospitalAdd];
+        uint recID = theHospital.hosprecordids[index];
+        pataddr = allrecords[recID].patientaddress;
+    }
+    
+    function getRecordDepartment (address HospitalAdd, uint index) constant returns(string deptname){
+        lib.Hospital theHospital = registeredhospitals[HospitalAdd];
+        uint recID = theHospital.hosprecordids[index];
+        deptname = allrecords[recID].department;
+    }
+    
+    function getRecordPatPayStat (address HospitalAdd, uint index) constant returns(bool status){
+        lib.Hospital theHospital = registeredhospitals[HospitalAdd];
+        uint recID = theHospital.hosprecordids[index];
+        status = allrecords[recID].doespatientpay;
+    }
+    
+    function getRecordHosPaidStat (address HospitalAdd, uint index) constant returns(bool status){
+        lib.Hospital theHospital = registeredhospitals[HospitalAdd];
+        uint recID = theHospital.hosprecordids[index];
+        status = allrecords[recID].ishospitalpaid;
+    }
+    
+    function getRecordSubscPaidStat (address HospitalAdd, uint index) constant returns(bool status){
+        lib.Hospital theHospital = registeredhospitals[HospitalAdd];
+        uint recID = theHospital.hosprecordids[index];
+        status = allrecords[recID].issubspaid;
+    }
+    
+    function getPatRecordCount (address PatientAdd) constant returns(uint reccount){
+        lib.Patient thePatient = registeredpatients[PatientAdd];
+        reccount = thePatient.recordcount;
+    }
+    
+    function getPatRecordHosAddr (address PatientAdd, uint index) constant returns(address hosaddr){
+        lib.Patient thePatient = registeredpatients[PatientAdd];
+        uint recID = thePatient.patrecordids[index];
+        hosaddr = allrecords[recID].hospitaladdress;
+    }
+    
+    function getPatRecordDepartment (address PatientAdd, uint index) constant returns(string deptname){
+        lib.Patient thePatient = registeredpatients[PatientAdd];
+        uint recID = thePatient.patrecordids[index];
+        deptname = allrecords[recID].department;
+    }
+    
+    function getPatRecordPatPayStat (address PatientAdd, uint index) constant returns(bool status){
+        lib.Patient thePatient = registeredpatients[PatientAdd];
+        uint recID = thePatient.patrecordids[index];
+        status = allrecords[recID].doespatientpay;
+    }
+    
+    function getPatRecordInsrAmnt (address PatientAdd, uint index) constant returns(uint insamnt){
+        lib.Patient thePatient = registeredpatients[PatientAdd];
+        uint recID = thePatient.patrecordids[index];
+        insamnt = allrecords[recID].insuredamount;
+    }
+    
+    function getPatRecordPatAmnt (address PatientAdd, uint index) constant returns(uint patamnt){
+        lib.Patient thePatient = registeredpatients[PatientAdd];
+        uint recID = thePatient.patrecordids[index];
+        patamnt = allrecords[recID].patientamount;
+    }
+    
+    function getPatRecordApprStat (address PatientAdd, uint index) constant returns(bool patappstat){
+        lib.Patient thePatient = registeredpatients[PatientAdd];
+        uint recID = thePatient.patrecordids[index];
+        patappstat = allrecords[recID].ispatapproved;
+    }
+    
+    function approvePatRecord (address PatientAdd, uint index) returns(bool patstat){
+        lib.Patient thePatient = registeredpatients[PatientAdd];
+        uint recID = thePatient.patrecordids[index];
+        
+        allrecords[recID].ispatapproved = true;
+        patstat = true;
+    }
+    
+    function getPriceofDeptofHos (address HospitalAdd, string deptname) constant returns(uint price){
+        lib.Hospital theHospital = registeredhospitals[HospitalAdd];
+        lib.Offer theOffer = theHospital.hospitaloffer;
+        
+        price = 0;
+        for(uint i=0; i<theOffer.coveragedepts.length; i++){
+            string tempdept = theOffer.coveragedepts[i];
+            if(stringsEqual(tempdept, deptname))
+                price = theOffer.prices[i];
+        }
+    }
+    
+    function getPercofDeptofHos (address HospitalAdd, string deptname) constant returns(uint perc){
+        lib.Hospital theHospital = registeredhospitals[HospitalAdd];
+        lib.Offer theOffer = theHospital.hospitaloffer;
+        
+        perc = 0;
+        for(uint i=0; i<theOffer.coveragedepts.length; i++){
+            string tempdept = theOffer.coveragedepts[i];
+            if(stringsEqual(tempdept, deptname))
+                perc = theOffer.percentages[i];
+        }
+    }
+    
+    function getTheNumberofHos () constant returns(uint count){
+        count = reghospitaladdrs.length;
+    }
+    
+    function getTheAddrofHos (uint indexval) constant returns(address hospAddr){
+        hospAddr = reghospitaladdrs[0];
     }
 
     function displayTheVote (address PersonAdd, address HospitalAdd) constant returns(uint vote){
@@ -383,6 +512,18 @@ contract msinsurancevo{
     }
     
     //
+    
+    function stringsEqual(string storage _a, string memory _b) internal returns (bool) {
+		bytes storage a = bytes(_a);
+		bytes memory b = bytes(_b);
+		if (a.length != b.length)
+			return false;
+		// @todo unroll this loop
+		for (uint i = 0; i < a.length; i ++)
+			if (a[i] != b[i])
+				return false;
+		return true;
+	}
 
     function frAddresstoString(address x)  returns(string){
      bytes memory b = new bytes(20);
@@ -390,51 +531,7 @@ contract msinsurancevo{
         b[i] = byte(uint8(uint(x) / (2**(8*(19 - i)))));
      return string(b);
     }
-    
-    
-    function frUintToString(uint v) constant returns (string) {
-          bytes32 ret;
-            if (v == 0) {
-                 ret = '0';
-            }
-            else {
-                 while (v > 0) {
-                      ret = bytes32(uint(ret) / (2 ** 8));
-                      ret |= bytes32(((v % 10) + 48) * 2 ** (8 * 31));
-                      v /= 10;
-                 }
-            }
 
-            bytes memory bytesString = new bytes(32);
-            for (uint j=0; j<32; j++) {
-                 byte char = byte(bytes32(uint(ret) * 2 ** (8 * j)));
-                 if (char != 0) {
-                      bytesString[j] = char;
-                 }
-            }
-
-            return string(bytesString);
-      }
-
-   function strConcat(string _a, string _b, string _c, string _d, string _e) returns (string){
-       uint str_addr = lib.strConcat(_a, _b, _c, _d, _e);
-        string str;
-        assembly{ str := str_addr }
-        return str;
-
-    }
-
-    function strConcat(string _a, string _b, string _c, string _d) internal returns (string) {
-        return strConcat(_a, _b, _c, _d, "");
-    }
-
-    function strConcat(string _a, string _b, string _c) internal returns (string) {
-        return strConcat(_a, _b, _c, "", "");
-    }
-
-    function strConcat(string _a, string _b) internal returns (string) {
-        return strConcat(_a, _b, "", "", "");
-    } 
 
 //////////////FOR TESTING IN POPULUS////////////
 

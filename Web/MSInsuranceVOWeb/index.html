@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>MS Insurance VO</title>
+  <script src="http://localhost:8081/bmyweb3.js"></script>
+ 
+  <script>
+  
+	function getcontractbalance() {
+		var blc = w3getcontractbalance();
+		
+		document.getElementById("conractbalance").innerHTML = "Contract Balance: " + blc ;
+		document.getElementById("hosconractbalance").innerHTML = "Contract Balance: " + blc ;
+		
+		var cresult = setCookie("CONTRACTBLC",blc) ;
+	}
+	
+	function getaccountbalance() {
+		var curraddr = getCookie("CURADDR") ;
+		var blc = w3getaccountbalance(curraddr) ;
+		
+		document.getElementById("accountbalance").innerHTML = "Account Balance: " + blc ;
+		document.getElementById("hosaccountbalance").innerHTML = "Account Balance: " + blc ;
+		
+		var cresult = setCookie("CURADDRBLC",blc) ;
+	}
+  
+	function preloginpat() {
+		document.getElementById("patlogin").style.display = "inline";
+		document.getElementById("patlogbut").style.display = "none";
+		document.getElementById("hoslogbut").style.display = "none";
+	}
+	
+	function loginpat() {
+		var fromaddr = document.getElementById("pataddr").value ; 
+        var pwd      = document.getElementById("patpwd").value ;
+		
+		var status = w3loginpat(fromaddr,pwd) ;
+		
+		document.getElementById("patlogin").style.display = "none";
+		document.getElementById("hoslogin").style.display = "none";
+		document.getElementById("pattabcontent").style.display = "initial";
+		
+		if(status == "REGISTERED"){
+			document.getElementById("patregperbut").style.display = "none";
+			document.getElementById("patregper").style.display = "none";
+			document.getElementById("patcheckoffbut").style.display = "inline";
+			document.getElementById("patmyrecordsbut").style.display = "inline";
+			document.getElementById("patcheckbalancebut").style.display = "inline";
+		
+			document.getElementById("conractbalance").innerHTML = "";
+			document.getElementById("accountbalance").innerHTML = "";	
+		}else{
+			document.getElementById("patregperbut").style.display = "inline";
+			
+			document.getElementById("premiumstat").innerHTML = "";
+			document.getElementById("paymentstat").innerHTML = "";
+			document.getElementById("regpatstat").innerHTML = "";
+		}
+		
+		var cresult = setCookie("CURADDR",fromaddr) ;
+    }
+	
+	function registerpat() {
+		document.getElementById("patregperbut").style.display = "none";
+		document.getElementById("patregper").style.display = "none";
+		document.getElementById("patcheckoffbut").style.display = "inline";
+		document.getElementById("patmyrecordsbut").style.display = "inline";
+    }
+	
+	function calcpremium() {
+		var curraddr = getCookie("CURADDR") ;
+		
+		var tcid = document.getElementById("tcid").value ; 
+        var gender = document.getElementById("gender").value ; 
+        var age = document.getElementById("age").value ; 
+		var location = document.getElementById("location").value ; 
+		
+		var prem = w3calcpremium(curraddr);
+		
+		document.getElementById("premiumstat").innerHTML = "Calculated Premium is:" + prem ;
+		document.getElementById("calcprembut").style.display = "none";
+		document.getElementById("payprembut").style.display = "inline";
+		
+		var cresult = setCookie("CURPREM",prem) ;
+    }
+	
+	function paypremium() {
+		var curraddr = getCookie("CURADDR") ;
+		var currprem = getCookie("CURPREM") ;
+		
+		var result = w3paypremium(curraddr, currprem);
+		
+		document.getElementById("paymentstat").innerHTML = "Your payment status is:" + result ;
+		document.getElementById("payprembut").style.display = "none";
+		document.getElementById("regpatsysbut").style.display = "inline";
+		
+		var cresult = setCookie("CURPREMPAID",result) ;
+    }
+	
+	function regpatsys() {
+		var curraddr = getCookie("CURADDR") ;
+		
+		var result = w3regpatsys(curraddr);
+		
+		document.getElementById("regpatstat").innerHTML = "Your registration status:" + result ;
+		document.getElementById("regpatsysbut").style.display = "none";
+		document.getElementById("patregcontbut").style.display = "inline";
+		
+		var cresult = setCookie("CURPATREGSTAT",result) ;
+    }
+	
+	function patregcont() {
+		document.getElementById("patregperbut").style.display = "none";
+		document.getElementById("patregper").style.display = "none";
+		document.getElementById("patcheckoffbut").style.display = "inline";
+		document.getElementById("patmyrecordsbut").style.display = "inline";
+		document.getElementById("patcheckbalancebut").style.display = "inline";
+		
+		document.getElementById("conractbalance").innerHTML = "";
+		document.getElementById("accountbalance").innerHTML = "";
+    }
+	
+	function preloginhos() {
+		document.getElementById("hoslogin").style.display = "inline";
+		document.getElementById("patlogbut").style.display = "none";
+		document.getElementById("hoslogbut").style.display = "none";
+	}
+	
+	function loginhos() {
+		var fromaddr = document.getElementById("hosaddr").value ; 
+        var pwd      = document.getElementById("hospwd").value ;
+		
+		var status = w3loginhos(fromaddr,pwd) ;
+		
+		document.getElementById("hoslogin").style.display = "none";
+		document.getElementById("patlogin").style.display = "none";
+		document.getElementById("hostabcontent").style.display = "initial";
+		
+
+		if(status == "REGISTERED"){
+			document.getElementById("hosregperbut").style.display = "none";
+			document.getElementById("hosregper").style.display = "none";
+			document.getElementById("hosoffersbut").style.display = "inline";
+			document.getElementById("hosallrecsbut").style.display = "inline";
+			document.getElementById("hosaddrecbut").style.display = "inline";
+			document.getElementById("hoscheckbalancebut").style.display = "inline";;
+		
+			document.getElementById("conractbalance").innerHTML = "";
+			document.getElementById("accountbalance").innerHTML = "";
+			
+		}else{
+			document.getElementById("hosregperbut").style.display = "inline";
+			document.getElementById("calcsubscrbut").style.display = "inline";
+			
+			document.getElementById("subscrstat").innerHTML = "";
+			document.getElementById("hosoffersstat").innerHTML = "";
+			document.getElementById("hoscoversstat").innerHTML = "";
+			document.getElementById("reghosstat").innerHTML = "";
+		}
+		
+		var cresult = setCookie("CURADDR",fromaddr) ;
+    }
+		
+	function calcsubscr() {
+		var curraddr = getCookie("CURADDR") ;
+		
+		var subsc = w3calcsubscr(curraddr);
+		
+		document.getElementById("subscrstat").innerHTML = "Calculated Subcription Percentage is: <b>" + subsc + "</b>";
+		document.getElementById("calcsubscrbut").style.display = "none";
+		document.getElementById("reghossysbut").style.display = "inline";
+	
+		var cresult = setCookie("CURSUBSCR",subsc) ;
+    }
+	
+	function reghossys() {
+		var curraddr = getCookie("CURADDR") ;	
+		var subscr = getCookie("CURSUBSCR") ;
+		
+		var result = w3reghossys(curraddr, subscr);
+		
+		document.getElementById("reghossysbut").style.display = "none";
+		document.getElementById("addofferform").style.display = "inline";
+		document.getElementById("addofferbut").style.display = "inline";
+	
+		var cresult = setCookie("CURPATREGSTAT",result) ;
+    }
+	
+	function addofferofhos() {
+		var curraddr = getCookie("CURADDR") ;
+		
+		var hospname = document.getElementById("hospname").value ; 
+		var offdesc = document.getElementById("offdesc").value ; 
+		
+		var offaddstat = w3addofferofhos(curraddr, hospname, offdesc);
+		
+		if(offaddstat){
+			document.getElementById("hosoffersstat").innerHTML = "Your offer is added. " ;
+			document.getElementById("hospname").disabled = true;
+			document.getElementById("offdesc").disabled = true;
+			document.getElementById("addofferbut").style.display = "none";
+			document.getElementById("addclaimform").style.display = "inline";
+			document.getElementById("addcoverbut").style.display = "inline";	
+		}else{
+			document.getElementById("hosoffersstat").innerHTML = "Your offer is not added. Try again. " ;
+			document.getElementById("addofferform").style.display = "inline";
+			document.getElementById("addofferbut").style.display = "inline";
+		}
+    }
+
+	function addcoverofhos() {
+		var curraddr = getCookie("CURADDR") ;
+		
+		var dept1 = document.getElementById("dept1").value ; 
+		var price1 = document.getElementById("price1").value ;
+		var covperc1 = document.getElementById("covperc1").value ; 
+		var dept2 = document.getElementById("dept2").value ; 
+		var price2 = document.getElementById("price2").value ;
+		var covperc2 = document.getElementById("covperc2").value ;
+		var dept3 = document.getElementById("dept3").value ; 
+		var price3 = document.getElementById("price3").value ;
+		var covperc3 = document.getElementById("covperc3").value ;
+		var dept4 = document.getElementById("dept4").value ; 
+		var price4 = document.getElementById("price4").value ;
+		var covperc4 = document.getElementById("covperc4").value ;
+		var dept5 = document.getElementById("dept5").value ; 
+		var price5 = document.getElementById("price5").value ;
+		var covperc5 = document.getElementById("covperc5").value ;
+		
+		if(dept1 != ""){
+			var covaddstat = w3addcoverofhos(curraddr, dept1, price1, covperc1);
+		}
+		if(dept2 != ""){
+			var covaddstat = w3addcoverofhos(curraddr, dept2, price2, covperc2);
+		}
+		if(dept3 != ""){
+			var covaddstat = w3addcoverofhos(curraddr, dept3, price3, covperc3);
+		}
+		if(dept4 != ""){
+			var covaddstat = w3addcoverofhos(curraddr, dept4, price4, covperc4);
+		}
+		if(dept5 != ""){
+			var covaddstat = w3addcoverofhos(curraddr, dept5, price5, covperc5);
+		}
+		
+			document.getElementById("hoscoversstat").innerHTML = "All Coverages are added." ;
+			document.getElementById("dept1").disabled = true;
+			document.getElementById("price1").disabled = true;
+			document.getElementById("covperc1").disabled = true;
+			document.getElementById("dept2").disabled = true;
+			document.getElementById("price2").disabled = true;
+			document.getElementById("covperc2").disabled = true;
+			document.getElementById("dept3").disabled = true;
+			document.getElementById("price3").disabled = true;
+			document.getElementById("covperc3").disabled = true;
+			document.getElementById("dept4").disabled = true;
+			document.getElementById("price4").disabled = true;
+			document.getElementById("covperc4").disabled = true;
+			document.getElementById("dept5").disabled = true;
+			document.getElementById("price5").disabled = true;
+			document.getElementById("covperc5").disabled = true;
+			document.getElementById("addcoverbut").style.display = "none";
+			document.getElementById("reghosstat").innerHTML = "Registration ended. Voting period is started." ;
+			document.getElementById("hosregcontbut").style.display = "inline";		
+    }
+	
+	function hosregcont() {	
+		document.getElementById("hosregperbut").style.display = "none";
+		document.getElementById("hosregper").style.display = "none";
+		document.getElementById("hosoffersbut").style.display = "inline";
+		document.getElementById("hosallrecsbut").style.display = "inline";
+		document.getElementById("hosaddrecbut").style.display = "inline";
+		document.getElementById("hoscheckbalancebut").style.display = "inline";;
+		
+		document.getElementById("conractbalance").innerHTML = "";
+		document.getElementById("accountbalance").innerHTML = "";
+    }
+		
+	function checkofferofhos() {
+		var curraddr = getCookie("CURADDR") ;
+		
+		var offerstat = w3checkofferofhos(curraddr);
+		if(offerstat){
+			document.getElementById("hosoffersstat").innerHTML = "There is Offer for the hospital. " ;
+			document.getElementById("addofferform").style.display = "none";
+			document.getElementById("addofferbut").style.display = "none";
+		}else{
+			document.getElementById("hosoffersstat").innerHTML = "There is no Offer for the hospital. " ;
+			document.getElementById("addofferform").style.display = "inline";
+			document.getElementById("addofferbut").style.display = "inline";
+		}
+    }
+	
+	function hostgetofferdetails() {
+		var curraddr = getCookie("CURADDR") ;
+		
+		var offerhosname = w3getofferhosname(curraddr);
+		var offerdesc = w3getofferdesc(curraddr);
+		var covercount = w3getcovercount(curraddr);
+		var hosstatus = w3gethospstat(curraddr);
+		var vote1count = w3gethosvote1count(curraddr);
+		var vote2count = w3gethosvote2count(curraddr);
+		
+		var offerdetails = "";
+		
+		offerdetails = "Hospital Name: " + offerhosname + " and Description: " + offerdesc + "<br>";
+		offerdetails = offerdetails + "Offer Status is: " + hosstatus + "<br>";
+		offerdetails = offerdetails + "Voting Status is: YES: " + vote1count + " -- NO: " + vote2count +  "<br>";
+		
+		var i=0;
+		for(i=0;i<covercount;i++){
+			var j = i+1;
+			offerdetails = offerdetails + "Coverage " + j + ":";
+			var dept = w3getcovdept(curraddr, i);
+			offerdetails = offerdetails + "Coverage Department: " + dept + " ";
+			var price = w3getcovprice(curraddr, i);
+			offerdetails = offerdetails + "Coverage Price: " + price + " ";
+			var percentage = w3getcovperc(curraddr,i);
+			offerdetails = offerdetails + "Coverage Price: " + percentage + "<br>";
+		}
+
+		document.getElementById("hosoffer").innerHTML = offerdetails;
+
+    }
+	
+	function hostgetrecordsdetails() {
+		var curraddr = getCookie("CURADDR") ;
+		
+		var recordsdetails = "";		
+		var reccount = w3gethosreccount(curraddr);
+		
+		var i=0;
+		for(i=0;i<reccount;i++){
+			var j = i + 1;
+			recordsdetails = recordsdetails + "Record " + j + ": ";
+			var recpatadd = w3gethosrecpataddr(curraddr, i);
+			recordsdetails = recordsdetails + "To Address: " + recpatadd + "<br>";
+			var recdept = w3gethosrecdept(curraddr, i);
+			recordsdetails = recordsdetails + "Deparment is: " + recdept + " ";
+			var recpatpaystat = w3gethosrecpatpaystat(curraddr,i);
+			if(recpatpaystat) recordsdetails = recordsdetails + "Patient Paid: YES ";
+			else recordsdetails = recordsdetails + "Patient Paid: NO ";
+			var rechospaystat = w3gethosrechospaystat(curraddr,i);
+			if(rechospaystat) recordsdetails = recordsdetails + "Hospital Paid: YES ";
+			else recordsdetails = recordsdetails + "Hospital Paid: NO ";
+			var recsubspaystat = w3gethosrecsubspaystat(curraddr,i);
+			if(recsubspaystat) recordsdetails = recordsdetails + "Subscription Paid: YES ";
+			else recordsdetails = recordsdetails + "Subscription Paid: NO ";
+			recordsdetails = recordsdetails + "<br><br><br>";
+		}
+		
+		document.getElementById("hosallrecords").innerHTML = recordsdetails;
+	}
+	
+	function addrecordofhos(){
+		var curraddr = getCookie("CURADDR") ;
+			
+		var recpataddr = document.getElementById("recpataddr").value ; 
+		var recdept = document.getElementById("recdept").value ;
+		
+		var recaddstat = w3addrecordofhos(curraddr, recpataddr, recdept);
+		
+		if(recaddstat){
+			document.getElementById("hosrecordsstat").innerHTML = "New Record is created. " ;
+			document.getElementById("recpataddr").value = "";
+			document.getElementById("recdept").value = "";
+			document.getElementById("addrecordbut").style.display = "inline";	
+		}else{
+			document.getElementById("hosrecordsstat").innerHTML = "The record is not added. Try again. " ;
+		}
+		
+	}
+	
+	function checkhosstatus() {
+		var curraddr = getCookie("CURADDR") ;	
+		var hosstat = w3gethospstat(curraddr);
+		
+		if(hosstat != "ACTIVE"){
+			document.getElementById("hosrecordsstat").innerHTML = "The Hospital is in " + hosstat + " state. You can not add Record!";
+//			document.getElementById("recpataddr").disabled = true;
+//			document.getElementById("recdept").disabled =true;
+//			document.getElementById("addrecordbut").style.display = "none";	
+		}else{
+			document.getElementById("hosrecordsstat").innerHTML = "The record is not added. Try again. " ;
+		}
+    }
+	
+	function gethosstatus() {
+		var curraddr = getCookie("CURADDR") ;	
+		var hosstat = w3gethospstat(curraddr);
+		document.getElementById("hosstatus").innerHTML = "There hospital status is: " + hosstat;
+    }
+	
+	function patgetalloffers() {
+		var curraddr = getCookie("CURADDR") ;	
+		
+		var hoscount = w3getaddrcount();
+		
+		var offer1details = "";
+		if (hoscount > 0){
+			var hosaddr = w3gethosadd(curraddr, 0);
+			
+			var offerhosname = w3getofferhosname(hosaddr);
+			var offerdesc = w3getofferdesc(hosaddr);
+			var covercount = w3getcovercount(hosaddr);
+			var hosstatus = w3gethospstat(hosaddr);
+			var votetype = w3gethospatvotestat(curraddr,hosaddr);
+			
+			offer1details = "Hospital Name: " + offerhosname + " and Description: " + offerdesc + "<br>";
+			offer1details = offer1details + "Offer Status is: " + hosstatus + " ";
+			
+			if(votetype == 0) offer1details = offer1details + "Vote Status is: NOTVOTED <br>";
+			else if(votetype == 1) offer1details = offer1details + "Vote Status is: VOTED as YES<br>";
+			else if(votetype == 2) offer1details = offer1details + "Vote Status is: VOTED as NO<br>";
+			
+			var i=0;
+			for(i=0;i<covercount;i++){
+				offer1details = offer1details + "Coverage 1: ";
+				var dept = w3getcovdept(hosaddr, i);
+				offer1details = offer1details + "Coverage Department: " + dept + " ";
+				var price = w3getcovprice(hosaddr, i);
+				offer1details = offer1details + "Coverage Price: " + price + " ";
+				var percentage = w3getcovperc(hosaddr,i);
+				offer1details = offer1details + "Coverage Price: " + percentage + "<br>";
+			}
+
+			document.getElementById("pathos1offer").innerHTML = offer1details;
+			
+			if(hosstatus == "ISINVOTE" && votetype == 0){
+				document.getElementById("patoff1yesbut").style.display = "inline";
+				document.getElementById("patoff1nobut").style.display = "inline";
+			}else{
+				document.getElementById("patoff1yesbut").style.display = "none";
+				document.getElementById("patoff1nobut").style.display = "none";
+			}
+		}
+		
+		var offer2details = "";
+		if (hoscount > 1){
+			var hosaddr = w3gethosadd(curraddr, 1);
+			
+			var offerhosname = w3getofferhosname(hosaddr);
+			var offerdesc = w3getofferdesc(hosaddr);
+			var covercount = w3getcovercount(hosaddr);
+			var hosstatus = w3gethospstat(hosaddr);
+			var votetype = w3gethospatvotestat(curraddr,hosaddr);
+			
+			offer2details = "Hospital Name: " + offerhosname + " and Description: " + offerdesc + "<br>";
+			offer2details = offer2details + "Offer Status is: " + hosstatus + " ";
+			
+			if(votetype == 0) offer2details = offer2details + "Vote Status is: NOTVOTED <br>";
+			else offer2details = offer2details + "Vote Status is: VOTED <br>";
+			
+			var i=0;
+			for(i=0;i<covercount;i++){
+				offer2details = offer2details + "Coverage 1: ";
+				var dept = w3getcovdept(hosaddr, i);
+				offer2details = offer2details + "Coverage Department: " + dept + " ";
+				var price = w3getcovprice(hosaddr, i);
+				offer2details = offer2details + "Coverage Price: " + price + " ";
+				var percentage = w3getcovperc(hosaddr,i);
+				offer2details = offer2details + "Coverage Price: " + percentage + "<br>";
+			}
+
+			document.getElementById("pathos2offer").innerHTML = offer2details;
+			
+			if(hosstatus == "ISINVOTE" && votetype == 0){
+				document.getElementById("patoff2yesbut").style.display = "inline";
+				document.getElementById("patoff2nobut").style.display = "inline";
+			}
+		}
+		
+		var offer3details = "";
+		if (hoscount > 2){
+			var hosaddr = w3gethosadd(curraddr, 2);
+			
+			var offerhosname = w3getofferhosname(hosaddr);
+			var offerdesc = w3getofferdesc(hosaddr);
+			var covercount = w3getcovercount(hosaddr);
+			var hosstatus = w3gethospstat(hosaddr);
+			var votetype = w3gethospatvotestat(curraddr,hosaddr);
+			
+			offer3details = "Hospital Name: " + offerhosname + " and Description: " + offerdesc + "<br>";
+			offer3details = offer3details + "Offer Status is: " + hosstatus + " ";
+			
+			if(votetype == 0) offer3details = offer3details + "Vote Status is: NOTVOTED <br>";
+			else offer3details = offer3details + "Vote Status is: VOTED <br>";
+			
+			var i=0;
+			for(i=0;i<covercount;i++){
+				offer3details = offer3details + "Coverage 1: ";
+				var dept = w3getcovdept(hosaddr, i);
+				offer3details = offer3details + "Coverage Department: " + dept + " ";
+				var price = w3getcovprice(hosaddr, i);
+				offer3details = offer3details + "Coverage Price: " + price + " ";
+				var percentage = w3getcovperc(hosaddr,i);
+				offer3details = offer3details + "Coverage Price: " + percentage + "<br>";
+			}
+
+			document.getElementById("pathos3offer").innerHTML = offer3details;
+			
+			if(hosstatus == "ISINVOTE" && votetype == 0){
+				document.getElementById("patoff3yesbut").style.display = "inline";
+				document.getElementById("patoff3nobut").style.display = "inline";
+			}
+		}
+		
+		var offer4details = "";
+		if (hoscount > 3){
+			var hosaddr = w3gethosadd(curraddr, 3);
+			
+			var offerhosname = w3getofferhosname(hosaddr);
+			var offerdesc = w3getofferdesc(hosaddr);
+			var covercount = w3getcovercount(hosaddr);
+			var hosstatus = w3gethospstat(hosaddr);
+			var votetype = w3gethospatvotestat(curraddr,hosaddr);
+			
+			offer4details = "Hospital Name: " + offerhosname + " and Description: " + offerdesc + "<br>";
+			offer4details = offer4details + "Offer Status is: " + hosstatus + " ";
+			
+			if(votetype == 0) offer4details = offer4details + "Vote Status is: NOTVOTED <br>";
+			else offer4details = offer4details + "Vote Status is: VOTED <br>";
+			
+			var i=0;
+			for(i=0;i<covercount;i++){
+				offer4details = offer4details + "Coverage 1: ";
+				var dept = w3getcovdept(hosaddr, i);
+				offer4details = offer4details + "Coverage Department: " + dept + " ";
+				var price = w3getcovprice(hosaddr, i);
+				offer4details = offer4details + "Coverage Price: " + price + " ";
+				var percentage = w3getcovperc(hosaddr,i);
+				offer4details = offer4details + "Coverage Price: " + percentage + "<br>";
+			}
+
+			document.getElementById("pathos4offer").innerHTML = offer4details;
+			
+			if(hosstatus == "ISINVOTE" && votetype == 0){
+				document.getElementById("patoff4yesbut").style.display = "inline";
+				document.getElementById("patoff4nobut").style.display = "inline";
+			}
+		}
+		
+		var offer5details = "";
+		if (hoscount > 4){
+			var hosaddr = w3gethosadd(curraddr, 4);
+			
+			var offerhosname = w3getofferhosname(hosaddr);
+			var offerdesc = w3getofferdesc(hosaddr);
+			var covercount = w3getcovercount(hosaddr);
+			var hosstatus = w3gethospstat(hosaddr);
+			var votetype = w3gethospatvotestat(curraddr,hosaddr);
+			
+			offer5details = "Hospital Name: " + offerhosname + " and Description: " + offerdesc + "<br>";
+			offer5details = offer5details + "Offer Status is: " + hosstatus + " ";
+			
+			if(votetype == 0) offer5details = offer1details + "Vote Status is: NOTVOTED <br>";
+			else offer1details = offer5details + "Vote Status is: VOTED <br>";
+			
+			var i=0;
+			for(i=0;i<covercount;i++){
+				offer5details = offer5details + "Coverage 1: ";
+				var dept = w3getcovdept(hosaddr, i);
+				offer5details = offer5details + "Coverage Department: " + dept + " ";
+				var price = w3getcovprice(hosaddr, i);
+				offer5details = offer5details + "Coverage Price: " + price + " ";
+				var percentage = w3getcovperc(hosaddr,i);
+				offer5details = offer5details + "Coverage Price: " + percentage + "<br>";
+			}
+
+			document.getElementById("pathos5offer").innerHTML = offer5details;
+			
+			if(hosstatus == "ISINVOTE" && votetype == 0){
+				document.getElementById("patoff5yesbut").style.display = "inline";
+				document.getElementById("patoff5nobut").style.display = "inline";
+			}
+		}
+		
+    }
+	
+	function patgetallrecords(){
+		var curraddr = getCookie("CURADDR") ;
+		
+		var recordsdetails = ""		
+		var reccount = w3getpatreccount(curraddr);
+		
+		var i=0;
+		
+		for(i=0;i<reccount;i++){
+			var j = i + 1;
+			recordsdetails = recordsdetails + "Record " + j + ": ";
+			var rechosadd = w3getpatrechosaddr(curraddr, i);
+			recordsdetails = recordsdetails + "Hospital Address: " + rechosadd + "<br>";
+			var recdept = w3getpatrecdept(curraddr, i);
+			recordsdetails = recordsdetails + "Deparment is: " + recdept + " ";
+			var recrecinsamnt = w3getpatrecinsamnt(curraddr,i);
+			recordsdetails = recordsdetails + "Insured Amount: " + recrecinsamnt + "<br>";
+			var recrecpatamnt = w3getpatrecpatamnt(curraddr,i);
+			recordsdetails = recordsdetails + "Patient Payment Amount: " + recrecpatamnt + " ";
+			var recpatpaystat = w3getpatrecpatpaystat(curraddr,i);
+			var recpatisappr = w3getpatrecisappr(curraddr,i);
+			if(recpatpaystat) recordsdetails = recordsdetails + "Patient Paid: YES <br>";
+			else recordsdetails = recordsdetails + "Patient Paid: NO <br>";
+			console.log("LOG APPSTAT: " + recpatisappr);
+			
+			if(!recpatisappr){
+				if(!recpatpaystat){
+					recordsdetails = recordsdetails + ">>> <b>You should pay " +recrecpatamnt+ " for this record </b>";
+					recordsdetails = recordsdetails + "<form id=\"patPayForm\">";
+					recordsdetails = recordsdetails + "<input type=\"hidden\" name=\"patrecindex\" id=\"patrecindex\" value=\"" + i + "\">";
+					recordsdetails = recordsdetails + "<input type=\"hidden\" name=\"patrecamnt\" id=\"patrecamnt\" value=\"" + recrecpatamnt + "\">";
+					recordsdetails = recordsdetails + "</form>";
+					recordsdetails = recordsdetails + "<button  id=\"patpaymentbut\" onclick=\"patmakerecpaym()\">Do Payment</button>";
+				}
+				if(recpatpaystat){
+					recordsdetails = recordsdetails + ">>> <b>No payment but you should approve this record </b>";
+					recordsdetails = recordsdetails + "<form id=\"patApprForm\" onSubmit=\"return patrecappr()\">";
+					recordsdetails = recordsdetails + "<input type=\"hidden\" name=\"patrecppindex\" id=\"patrecppindex\" value=\"" + i + "\">";
+					recordsdetails = recordsdetails + "<input name=\"Submit\"  type=\"submit\" value=\"Approve\" />";
+					recordsdetails = recordsdetails + "</form>";
+
+				}
+			}
+			console.log(recordsdetails);
+			recordsdetails = recordsdetails + "<br><br><br>";
+		}
+
+		document.getElementById("patallrecords").innerHTML = recordsdetails;
+	}
+	
+	function patmakerecpaym(){
+		var curraddr = getCookie("CURADDR") ;
+		
+		var recindex = document.getElementById("patrecindex").value ;
+		var recamnt = document.getElementById("patrecamnt").value ;
+		var patpaystat = w3patmakerecpaym(curraddr,recindex,recamnt);
+		
+		console.log("LOG PAYMENT: recindex: " + recindex + " -- recamnt: " + recamnt);
+		
+		var hospaystat = false;
+		var subspaystat = false;
+		if(patpaystat){
+			hospaystat = w3makehospaym(curraddr,recindex);
+			if(hospaystat){
+				subspaystat = w3makesubspaym(curraddr,recindex);
+			}
+			
+			var patappstat = w3patapprrec(curraddr,recindex);
+			patgetallrecords();
+		}
+	}	
+	
+	function patrecappr(){
+		var curraddr = getCookie("CURADDR") ;
+		
+		var recindex = document.getElementById("patrecppindex").value ;
+		
+			var hospaystat = w3makehospaym(curraddr,recindex);
+			var subspaystat = w3makesubspaym(curraddr,recindex);
+			
+			console.log("LOG RECAPP: RECAPPINDEX" + recindex )
+			
+			var patappstat = w3patapprrec(curraddr,recindex);
+			patgetallrecords();
+	}
+	
+	function patoff1yes() {
+		var curraddr = getCookie("CURADDR") ;
+		
+		var hostaddr = w3gethosadd(curraddr,0);
+		var hosstat = w3patvotetheoff(curraddr,hostaddr,1);
+		
+		console.log("SBR: " + hostaddr + "--" + hosstat);
+		
+		document.getElementById("patoff1yesbut").style.display = "none";	
+		document.getElementById("patoff1nobut").style.display = "none";	
+		
+		patgetalloffers();
+    }
+	
+	function patoff1no() {
+		var curraddr = getCookie("CURADDR") ;
+
+		var hostaddr = w3gethosadd(curraddr,0);		
+		var hosstat = w3patvotetheoff(curraddr,hostaddr,2);
+		
+		document.getElementById("patoff1yesbut").style.display = "none";	
+		document.getElementById("patoff1nobut").style.display = "none";	
+		
+		patgetalloffers();
+    }
+		
+	function patoff2yes() {
+		var curraddr = getCookie("CURADDR") ;
+
+		var hostaddr = w3gethosadd(curraddr,1);		
+		var hosstat = w3patvotetheoff(curraddr,hostaddr,1);
+		
+		document.getElementById("patoff2yesbut").style.display = "none";	
+		document.getElementById("patoff2nobut").style.display = "none";	
+		
+		patgetalloffers();
+    }
+	
+	function patoff2no() {
+		var curraddr = getCookie("CURADDR") ;
+
+		var hostaddr = w3gethosadd(curraddr,1);		
+		var hosstat = w3patvotetheoff(curraddr,hostaddr,2);
+		
+		document.getElementById("patoff2yesbut").style.display = "none";	
+		document.getElementById("patoff2nobut").style.display = "none";	
+		
+		patgetalloffers();
+    }
+    
+	function patoff3yes() {
+		var curraddr = getCookie("CURADDR") ;	
+		
+		var hostaddr = w3gethosadd(curraddr,2);
+		var hosstat = w3patvotetheoff(curraddr,hostaddr,1);
+		
+		document.getElementById("patoff3yesbut").style.display = "none";	
+		document.getElementById("patoff3nobut").style.display = "none";	
+		
+		patgetalloffers();
+    }
+	
+	function patoff3no() {
+		var curraddr = getCookie("CURADDR") ;	
+		
+		var hostaddr = w3gethosadd(curraddr,2);
+		var hosstat = w3patvotetheoff(curraddr,hostaddr,2);
+		
+		document.getElementById("patoff3yesbut").style.display = "none";	
+		document.getElementById("patoff3nobut").style.display = "none";	
+		
+		patgetalloffers();
+    }
+
+	function patoff4yes() {
+		var curraddr = getCookie("CURADDR") ;
+		
+		var hostaddr = w3gethosadd(curraddr,3);
+		var hosstat = w3patvotetheoff(curraddr,hostaddr,1);
+		
+		document.getElementById("patoff4yesbut").style.display = "none";	
+		document.getElementById("patoff4nobut").style.display = "none";	
+		
+		patgetalloffers();
+    }
+	
+	function patoff4no() {
+		var curraddr = getCookie("CURADDR") ;
+
+		var hostaddr = w3gethosadd(curraddr,3);		
+		var hosstat = w3patvotetheoff(curraddr,hostaddr,2);
+		
+		document.getElementById("patoff4yesbut").style.display = "none";	
+		document.getElementById("patoff4nobut").style.display = "none";	
+		
+		patgetalloffers();
+    }
+
+	function patoff5yes() {
+		var curraddr = getCookie("CURADDR") ;
+
+		var hostaddr = w3gethosadd(curraddr,4);		
+		var hosstat = w3patvotetheoff(curraddr,hostaddr,1);
+		
+		document.getElementById("patoff5yesbut").style.display = "none";	
+		document.getElementById("patoff5nobut").style.display = "none";	
+		
+		patgetalloffers();
+    }
+	
+	function patoff5no() {
+		var curraddr = getCookie("CURADDR") ;
+
+		var hostaddr = w3gethosadd(curraddr,4);		
+		var hosstat = w3patvotetheoff(curraddr,hostaddr,2);
+		
+		document.getElementById("patoff5yesbut").style.display = "none";	
+		document.getElementById("patoff5nobut").style.display = "none";	
+		
+		patgetalloffers();
+    }
+	
+	function callcontract() {
+        var fromaddr = document.getElementById("fromaddr").value ; 
+        var pwd      = document.getElementById("password").value ; 
+        var argno    = document.getElementById("argument").value ; 
+        var amnt     = document.getElementById("amount").value ; 
+        
+        var stat = mycallcontract(fromaddr,pwd,argno,amnt,900000) ;
+        document.getElementById("status").innerHTML = "Contract called: Tx no:" + stat ;
+    }	
+	
+	function setcookie() {
+        var cookiename = document.getElementById("cookiename").value ; 
+		var cookieval = document.getElementById("cookieval").value ; 
+        
+        var result = setCookie(cookiename,cookieval) ;
+        document.getElementById("cookiesetstatus").innerHTML = "Cookie Set Status is:" + result ;
+    }
+	
+	function getcookie() {
+        var cookiename = document.getElementById("cookiename").value ; 
+        
+        var result = getCookie(cookiename) ;
+        document.getElementById("cookiegetstatus").innerHTML = "Cookie Get Result is:" + result ;
+		
+		document.getElementById("testform").style.display = "initial";
+    }
+	
+	function deleteAllCookies() {
+		var cookies = document.cookie.split(";");
+
+		for (var i = 0; i < cookies.length; i++) {
+			var cookie = cookies[i];
+			var eqPos = cookie.indexOf("=");
+			var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+			document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+		}
+	}
+	
+	function logoutSystem() {
+		deleteAllCookies();
+		document.getElementById("patlogbut").style.display = "inline";
+		document.getElementById("hoslogbut").style.display = "inline";
+		
+		document.getElementById("patlogin").style.display = "none";
+		document.getElementById("hoslogin").style.display = "none";
+		document.getElementById("pattabcontent").style.display = "none";
+		document.getElementById("hostabcontent").style.display = "none";
+	}
+  
+  </script>
+  <style>
+body {font-family: "Lato", sans-serif;}
+
+/* Style the tab */
+div.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+div.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+div.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+div.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+.button {
+    background-color: #99CCFF;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+	border-radius: 8px;
+	transition-duration: 0.4s;
+}
+</style>
+</head>
+
+<body>
+
+<center><p><h1>MS Insurance VO</h1></p></center>
+
+<center>
+<button class="button" id="patlogbut" onclick="preloginpat()">Login as Patient</button>
+<br><br>
+<button class="button"id="hoslogbut" onclick="preloginhos()">Login as Hospital</button>
+</center>
+
+<center>
+<div id="patlogin" style="display: none;">
+	<table cellpadding="6px"border="1px">
+		<tr>
+			<td align="left" bgcolor="#CCE5FF">
+				<h2>Login To System as Patient</h2>
+				<form id="loginPatForm">
+					<p> Address: <textarea id="pataddr" rows="1" cols="100"></textarea> </p>
+					<p> Passwd: <input type="password" id="patpwd" rows="1" cols="100"></input> </p>
+				</form>
+				<button onclick="loginpat()">Login</button>
+			</td>
+		</tr>
+	</table>
+</div>
+</center>
+
+<center>
+<div id="hoslogin"style="display: none;">
+	
+	<table cellpadding="6px" border="1px">
+		<tr>
+			<td align="left" bgcolor="#CCE5FF">
+				<h2>Login To System as Hospital</h2>
+				<form id="loginHosForm">
+					<p> Address: <textarea id="hosaddr" rows="1" cols="100"></textarea> </p>
+					<p> Passwd: <input type="password" id="hospwd" rows="1" cols="100"></input> </p>
+				</form>
+				<button onclick="loginhos()">Login</button>
+				
+			</td>
+		</tr>
+	</table>
+</div>
+</center>
+
+<div id="pattabcontent" style="display: none;">
+	<div class="tab">
+		<button class="tablinks" onclick="openCity(event, 'patregper')" id="patregperbut" style="display: none;">Register Patient to Period</button>
+		<button class="tablinks" onclick="openCity(event, 'patcheckoff'); patgetalloffers();" id="patcheckoffbut" style="display: none;">Check Offers</button>
+		<button class="tablinks" onclick="openCity(event, 'patmyrecords'); patgetallrecords();" id="patmyrecordsbut" style="display: none;">My Records</button>
+		<button class="tablinks" onclick="openCity(event, 'patcheckbalance'); getcontractbalance(); getaccountbalance();" id="patcheckbalancebut" style="display: none;">Check Balances</button>
+		<button class="tablinks" onclick="logoutSystem();" id="patlogoutbut">Logout</button>
+	</div>
+
+	<div id="patregper" class="tabcontent"  style="display: none;">
+		<h3>Register Person to Current Period</h3>		
+		<form id="regpersonform">
+			<table cellpadding="3px">
+			<tr>
+				<td align="left">
+					<p>TCID:</p>
+				</td>
+				<td align="left">
+					<p><textarea id="tcid" rows="1" cols="100"></textarea> </p>
+				</td>
+			</tr>
+			<tr>
+				<td align="left">
+					<p>Gender:</p>
+				</td>
+				<td align="left">
+					<p><textarea id="gender"   rows="1" cols="100"></textarea> </p>
+				</td>
+			</tr>
+			<tr>
+				<td align="left">
+					<p>Age:</p>
+				</td>
+				<td align="left" >
+					<p><textarea id="age"   rows="1" cols="100"></textarea></p>
+				</td>
+			</tr>
+			<tr>
+				<td align="left">
+					<p>Location:</p>
+				</td>
+				<td align="left">
+					<p><textarea id="location"   rows="1" cols="100"></textarea></p>
+				</td>
+			</tr>
+			</table>
+		</form>
+		<p>Click button to calculate the premium:</p> <button onclick="calcpremium()" id="calcprembut">Calculate Premium</button>
+		<p id="premiumstat"></p><button onclick="paypremium()" id="payprembut"  style="display: none;">Pay Premium</button>	
+		<p id="paymentstat"></p><button onclick="regpatsys()" id="regpatsysbut" style="display: none;">Register to Period</button>	
+		<p id="regpatstat"></p><button onclick="patregcont()" id="patregcontbut" style="display: none;">Click on Continue</button>
+	</div>
+	
+	<div id="patcheckoff" class="tabcontent">
+		<h3>All Existing Offers</h3>
+		<p id="pathos1offer"></p>
+		<button onclick="patoff1yes()" id="patoff1yesbut" style="display: none;">YES</button><button onclick="patoff1no()" id="patoff1nobut" style="display: none;">NO</button><br>
+		<p id="pathos2offer"></p>
+		<button onclick="patoff2yes()" id="patoff2yesbut" style="display: none;">YES</button><button onclick="patoff2no()" id="patoff2nobut" style="display: none;">NO</button><br>
+		<p id="pathos3offer"></p>
+		<button onclick="patoff3yes()" id="patoff3yesbut" style="display: none;">YES</button><button onclick="patoff3no()" id="patoff3nobut" style="display: none;">NO</button><br>
+		<p id="pathos4offer"></p>
+		<button onclick="patoff4yes()" id="patoff4yesbut" style="display: none;">YES</button><button onclick="patoff4no()" id="patoff4nobut" style="display: none;">NO</button><br>
+		<p id="pathos5offer"></p>
+		<button onclick="patoff5yes()" id="patoff5yesbut" style="display: none;">YES</button><button onclick="patoff5no()" id="patoff5nobut" style="display: none;">NO</button><br>
+	</div>
+	
+	<div id="patmyrecords" class="tabcontent">
+		<h3>My Record History</h3>
+		<p id="patallrecords"></p>
+	</div>
+	
+	<div id="patcheckbalance" class="tabcontent">
+		<h3>Balance Status</h3>
+		<p id="conractbalance"></p>
+		<p id="accountbalance"></p>
+	</div>
+</div>
+
+<div id="hostabcontent" style="display: none;">
+	<div class="tab">
+		<button class="tablinks" onclick="openCity(event, 'hosregper')" id="hosregperbut"  style="display: none;">Register Hospital to Period</button>
+		<button class="tablinks" onclick="openCity(event, 'hosoffers');checkofferofhos(); hostgetofferdetails();" id="hosoffersbut" style="display: none;">Hospital Offer</button>
+		<button class="tablinks" onclick="openCity(event, 'hosallrecords'); hostgetrecordsdetails();" id="hosallrecsbut" style="display: none;">Hospital Records</button>
+		<button class="tablinks" onclick="openCity(event, 'hosaddrecord'); checkhosstatus();" id="hosaddrecbut" style="display: none;">Add Record</button>
+		<button class="tablinks" onclick="openCity(event, 'hoscheckbalance'); getcontractbalance(); getaccountbalance();" id="hoscheckbalancebut" style="display: none;">Check Balances</button>
+		<button class="tablinks" onclick="logoutSystem();" id="hoslogoutbut">Logout</button>
+	</div>
+	<div id="hosregper" class="tabcontent"  style="display: none;">
+		<h3>Register Hospital to Period</h3>	
+		
+		<p>Click button to calculate the Subscription Amount: </p> <button onclick="calcsubscr()" id="calcsubscrbut"  style="display: none;">Calculate Subscription</button>	
+		
+		<p id="subscrstat"></p><button onclick="reghossys()" id="reghossysbut"  style="display: none;">Start Registration</button>
+		
+		<form id="addofferform" style="display: none;">
+			<table cellpadding="3px">
+				<tr>
+					<td align="left">
+						<p>Hospital Name:</p>
+					</td>
+					<td align="left">
+						<p><textarea id="hospname" rows="1" cols="100"></textarea></p>
+					</td>
+				</tr>
+				<tr>
+					<td align="left">
+						<p>Offer Description:</p>
+					</td>
+					<td align="left">
+						<p><textarea id="offdesc"   rows="1" cols="100"></textarea></p>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<button onclick="addofferofhos()" id="addofferbut" style="display: none;">Add Offer</button>
+		<p id="hosoffersstat"></p>
+		
+		<form id="addclaimform" style="display: none;">
+			<table cellpadding="3px">
+				<tr>
+					<td align="left">
+						<p>Coverage 1:</p>
+					</td>
+					<td align="left">
+						<p>Dept: <textarea id="dept1" rows="1" cols="50"></textarea></p>
+					</td>
+					<td align="left">
+						<p>Price: <textarea id="price1" rows="1" cols="20"></textarea></p>
+					</td>
+					<td align="left">
+						<p>Perc: <textarea id="covperc1" rows="1" cols="20"></textarea></p>
+					</td>
+				</tr>
+				<tr>
+					<td align="left">
+						<p>Coverage 2:</p>
+					</td>
+					<td align="left">
+						<p>Dept: <textarea id="dept2" rows="1" cols="50"></textarea></p>
+					</td>
+					<td align="left">
+						<p>Price: <textarea id="price2" rows="1" cols="20"></textarea></p>
+					</td>
+					<td align="left">
+						<p>Perc: <textarea id="covperc2" rows="1" cols="20"></textarea></p>
+					</td>
+				</tr>
+				<tr>
+					<td align="left">
+						<p>Coverage 3:</p>
+					</td>
+					<td align="left">
+						<p>Dept: <textarea id="dept3" rows="1" cols="50"></textarea></p>
+					</td>
+					<td align="left">
+						<p>Price: <textarea id="price3" rows="1" cols="20"></textarea></p>
+					</td>
+					<td align="left">
+						<p>Perc: <textarea id="covperc3" rows="1" cols="20"></textarea></p>
+					</td>
+				</tr>
+				<tr>
+					<td align="left">
+						<p>Coverage 4:</p>
+					</td>
+					<td align="left">
+						<p>Dept: <textarea id="dept4" rows="1" cols="50"></textarea></p>
+					</td>
+					<td align="left">
+						<p>Price: <textarea id="price4" rows="1" cols="20"></textarea></p>
+					</td>
+					<td align="left">
+						<p>Perc: <textarea id="covperc4" rows="1" cols="20"></textarea></p>
+					</td>
+				</tr>
+				<tr>
+					<td align="left">
+						<p>Coverage 5:</p>
+					</td>
+					<td align="left">
+						<p>Dept: <textarea id="dept5" rows="1" cols="50"></textarea></p>
+					</td>
+					<td align="left">
+						<p>Price: <textarea id="price5" rows="1" cols="20"></textarea></p>
+					</td>
+					<td align="left">
+						<p>Perc: <textarea id="covperc5" rows="1" cols="20"></textarea></p>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<button onclick="addcoverofhos()" id="addcoverbut" style="display: none;">Add Coverages</button>
+		<p id="hoscoversstat"></p>
+		
+		<p id="reghosstat"></p><button onclick="hosregcont()" id="hosregcontbut"  style="display: none;">Click on Continue</button>
+	</div>
+	
+	<div id="hosoffers" class="tabcontent">
+		<h3>Hospital Offer Details</h3>
+		<p id="hosoffer"></p>
+	</div>
+	
+	<div id="hosallrecords" class="tabcontent">
+		<h3>All Records History</h3>
+		<p id="hosallrecords"></p>
+	</div>
+	
+	<div id="hosaddrecord" class="tabcontent">
+		<h3>Add New Record</h3>
+		
+		<form id="addrecordform">
+			<table cellpadding="3px">
+				<tr>
+					<td align="left">
+						<p>Patient Address:</p>
+					</td>
+					<td align="left">
+						<p><textarea id="recpataddr" rows="1" cols="100"></textarea></p>
+					</td>
+				</tr>
+				<tr>
+					<td align="left">
+						<p>Record Department:</p>
+					</td>
+					<td align="left">
+						<p><textarea id="recdept"   rows="1" cols="100"></textarea></p>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<button onclick="addrecordofhos()" id="addrecordbut">Add Record</button>
+		<p id="hosrecordsstat"></p>
+	</div>
+	
+	<div id="hoscheckbalance" class="tabcontent">
+		<h3>Balance Status</h3>
+		<p id="hosconractbalance"></p>
+		<p id="hosaccountbalance"></p>
+	</div>
+</div>
+
+<script>
+function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length-1; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+</script>
+
+</body>
+</html>
